@@ -17,8 +17,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.teamzero.chatter.databinding.ActivityMainBinding;
-import com.teamzero.chatter.ui.fragments.auth.data.LoginDataSource;
-import com.teamzero.chatter.ui.fragments.auth.data.LoginRepository;
 import com.teamzero.chatter.ui.fragments.auth.login.LoginFragment;
 
 public class MainActivity extends AppCompatActivity {
