@@ -1,6 +1,7 @@
 package com.teamzero.chatter.ui.fragments.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class ProfileFragment extends Fragment {
             binding.bioField.setText(MainActivity.getUserInfo().getBio());
             binding.saveProfileButton.setActivated(true);
         } catch(NullPointerException e) {
+            Log.e("ProfileERR", e.getMessage());
             binding.nickname.setText("");
             binding.bioField.setText(getString(R.string.error));
             binding.saveProfileButton.setActivated(false);
