@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,10 +28,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.teamzero.chatter.R;
 import com.teamzero.chatter.databinding.FragmentLoginBinding;
+import com.teamzero.chatter.ui.fragments.auth.register.RegisterFragment;
 
 public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;
+    private FirebaseAuth mAuth;
 
     @Nullable
     @Override
@@ -38,6 +41,7 @@ public class LoginFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        mAuth = FirebaseAuth.getInstance();
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
@@ -48,9 +52,36 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
-        final Button loginButton = binding.login;
-        final Button registerButton = binding.register;
+        final Button loginButton = binding.loginPrompt;
+        final Button registerButton = binding.signUpPrompt;
         final ProgressBar loadingProgressBar = binding.loading;
+
+        loginButton.setOnClickListener((v) -> {
+
+            String username = usernameEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
+
+            if(!Patterns.EMAIL_ADDRESS.matcher(username).matches()){
+                usernameEditText.setError(getString(R.string.invalid_username));
+                usernameEditText.requestFocus();
+                return;
+            }
+
+            if(password.trim().length() < 6) {
+                passwordEditText.setError(getString(R.string.invalid_password));
+                passwordEditText.requestFocus();
+                return;
+            }
+
+            loadingProgressBar.setVisibility(View.VISIBLE);
+            login(username, password);
+            loadingProgressBar.setVisibility(View.GONE);
+        });
+
+        registerButton.setOnClickListener((v) -> getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, new RegisterFragment())
+                .addToBackStack("signUp")
+                .commit());
     }
 
     @Override
@@ -58,4 +89,21 @@ public class LoginFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    private void login(String username, String password){
+        mAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                if(task.getResult().getUser().isEmailVerified()) {
+                    Toast.makeText(getContext(), R.string.welcome, Toast.LENGTH_SHORT).show();
+                    getActivity().getSupportFragmentManager().beginTransaction().detach(this).commit();
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+                } else {
+                    Toast.makeText(getContext(), R.string.confirmation_sent, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getContext(), R.string.login_failed, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }
