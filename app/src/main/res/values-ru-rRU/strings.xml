@@ -16,4 +16,24 @@
     <string name="confirmation_sent">Проверьте свой email для подтверждения</string>
     <string name="register_failed">Произошла ошибка при регистрации</string>
     <string name="default_bio">Не могу дождаться новых знакомств!</string>
+    <string name="bio">О себе:</string>
+    <string name="bioHint">Расскажите что-нибудь о себе!</string>
+    <string name="saveProfile">Сохранить</string>
+    <string name="user_avatar">Аватар пользователя</string>
+    <string name="error">Произошла ошибка.</string>
+    <string name="title_reset_pass">Восстановить пароль</string>
+    <string name="forgot_password_button">Забыли пароль?</string>
+    <string name="reset_password_button">Восстановить</string>
+    <string name="check_correct_email">Пожалуйста, убедитесь, что почта корректна.</string>
+    <string name="save_success">Профиль успешно сохранён</string>
+    <string name="save_fail">Профиль не сохранён. Проверьте интернет-подключение.</string>
+    <string name="finder_slogan">Всё начинается здесь!</string>
+    <string name="tags_title">Тэги:</string>
+    <string name="tags_hint">Тэги через запятую (можно оставить пустым)</string>
+    <string name="title_find_existing">Найти чужой чат</string>
+    <string name="title_create_new">Создать свой чат</string>
+    <string name="find_chat_button">Вперёд!</string>
+    <string name="chat_name_field_title">Название чата:</string>
+    <string name="chat_name_field">Придумай что-то забавное!</string>
+    <string name="button_create_chat_text">Создать</string>
 </resources>

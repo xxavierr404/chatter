@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.teamzero.chatter.R;
 import com.teamzero.chatter.databinding.FragmentLoginBinding;
 import com.teamzero.chatter.ui.fragments.auth.register.RegisterFragment;
+import com.teamzero.chatter.ui.fragments.auth.resetpassword.PasswordResetFragment;
 
 public class LoginFragment extends Fragment {
 
@@ -54,6 +55,7 @@ public class LoginFragment extends Fragment {
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.loginPrompt;
         final Button registerButton = binding.signUpPrompt;
+        final Button resetPasswordButton = binding.forgotPassButton;
         final ProgressBar loadingProgressBar = binding.loading;
 
         loginButton.setOnClickListener((v) -> {
@@ -82,6 +84,11 @@ public class LoginFragment extends Fragment {
                 .replace(R.id.frame, new RegisterFragment())
                 .addToBackStack("signUp")
                 .commit());
+
+        resetPasswordButton.setOnClickListener((v) -> getActivity().getSupportFragmentManager().beginTransaction()
+        .replace(R.id.frame, new PasswordResetFragment())
+        .addToBackStack("forgotPass")
+        .commit());
     }
 
     @Override

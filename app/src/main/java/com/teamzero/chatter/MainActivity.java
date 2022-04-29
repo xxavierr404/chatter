@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
@@ -16,7 +17,12 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.teamzero.chatter.databinding.ActivityMainBinding;
+import com.teamzero.chatter.model.User;
 import com.teamzero.chatter.ui.fragments.auth.login.LoginFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +30,12 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private FirebaseAuth mAuth;
+
+    private static User userInfo;
+
+    public static User getUserInfo(){
+        return userInfo;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +61,25 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser == null){
             getSupportFragmentManager().beginTransaction().replace(R.id.frame, new LoginFragment()).commit();
+        } else {
+            FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid())
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String nickname = String.valueOf(snapshot.child("nickname").getValue());
+                            String bio = String.valueOf(snapshot.child("bio").getValue());
+                            if (userInfo == null) userInfo = new User(nickname, bio);
+                            else {
+                                userInfo.setNickname(nickname);
+                                userInfo.setBio(bio);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
         }
     }
 
