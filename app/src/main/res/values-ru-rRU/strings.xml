@@ -36,4 +36,5 @@
     <string name="chat_name_field_title">Название чата:</string>
     <string name="chat_name_field">Придумай что-то забавное!</string>
     <string name="button_create_chat_text">Создать</string>
+    <string name="chat_created">Готово! Подожди, пока кто-то придёт.</string>
 </resources>

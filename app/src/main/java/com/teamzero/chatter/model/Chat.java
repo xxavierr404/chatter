@@ -1,23 +1,30 @@
 package com.teamzero.chatter.model;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Chat {
-    private int id;
-    private String adminUID;
-    private Set<String> members;
-    private Set<String> authorized;
-    private Set<String> tags;
-    private ArrayList<Integer> messageIDs;
+    private final String id;
+    private final String adminUID;
+    private List<String> members;
+    private List<String> authorized;
+    private List<String> tags;
+    private List<String> messageIDs;
 
-    public Chat(int id, String creator){
+    public Chat(String id, String creator){
         this.id = id;
         adminUID = creator;
+        members = new ArrayList<String>();
+        authorized = new ArrayList<String>();
+        tags = new ArrayList<String>();
+        messageIDs = new ArrayList<String>();
     }
 
-    public Chat(int id, String adminUID, Set<String> members,
-                Set<String> authorized, Set<String> tags, ArrayList<Integer> messageIDs){
+    public Chat(String id, String adminUID, ArrayList<String> members,
+                ArrayList<String> authorized, ArrayList<String> tags, ArrayList<String> messageIDs){
         this.id = id;
         this.adminUID = adminUID;
         this.members = members;
@@ -26,7 +33,7 @@ public class Chat {
         this.messageIDs = messageIDs;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -34,19 +41,19 @@ public class Chat {
         return adminUID;
     }
 
-    public Set<String> getMembers() {
+    public List<String> getMembers() {
         return members;
     }
 
-    public Set<String> getAuthorized() {
+    public List<String> getAuthorized() {
         return authorized;
     }
 
-    public ArrayList<Integer> getMessageIDs() {
+    public List<String> getMessageIDs() {
         return messageIDs;
     }
 
-    public Set<String> getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
@@ -66,16 +73,20 @@ public class Chat {
         members.remove(wasMember);
     }
 
-    public void addMessage(int newMessageID){
+    public void addMessage(String newMessageID){
         messageIDs.add(newMessageID);
     }
 
-    public void removeMessage(int removedMessage){
+    public void removeMessage(String removedMessage){
         messageIDs.remove(removedMessage);
     }
 
     public void addTag(String newTag){
         tags.add(newTag);
+    }
+
+    public void setTags(List<String> tags){
+        this.tags = tags;
     }
 
     public void removeTag(String removedTag){
