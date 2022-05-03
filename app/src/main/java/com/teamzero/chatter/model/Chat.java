@@ -7,34 +7,30 @@ import java.util.List;
 import java.util.Set;
 
 public class Chat {
-    private final String id;
+    private String name;
     private final String adminUID;
     private List<String> members;
     private List<String> authorized;
     private List<String> tags;
     private List<String> messageIDs;
 
-    public Chat(String id, String creator){
-        this.id = id;
+    public Chat(String creator){
         adminUID = creator;
+        name = "Middlespace";
         members = new ArrayList<String>();
         authorized = new ArrayList<String>();
         tags = new ArrayList<String>();
         messageIDs = new ArrayList<String>();
     }
 
-    public Chat(String id, String adminUID, ArrayList<String> members,
+    public Chat(String adminUID, ArrayList<String> members, String name,
                 ArrayList<String> authorized, ArrayList<String> tags, ArrayList<String> messageIDs){
-        this.id = id;
         this.adminUID = adminUID;
         this.members = members;
+        this.name = name;
         this.authorized = authorized;
         this.tags = tags;
         this.messageIDs = messageIDs;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getAdminUID() {
@@ -91,5 +87,13 @@ public class Chat {
 
     public void removeTag(String removedTag){
         tags.remove(removedTag);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

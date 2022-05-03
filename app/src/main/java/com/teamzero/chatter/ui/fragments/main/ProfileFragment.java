@@ -1,10 +1,12 @@
 package com.teamzero.chatter.ui.fragments.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,11 +20,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.teamzero.chatter.MainActivity;
 import com.teamzero.chatter.R;
 import com.teamzero.chatter.databinding.FragmentProfileBinding;
 import com.teamzero.chatter.model.User;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileFragment extends Fragment {
 
@@ -35,29 +42,45 @@ public class ProfileFragment extends Fragment {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
-        View root = binding.getRoot();
-        return root;
+        return binding.getRoot();
     }
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        try {
-            binding.nickname.setText(MainActivity.getUserInfo().getNickname());
-            binding.bioField.setText(MainActivity.getUserInfo().getBio());
-            binding.saveProfileButton.setActivated(true);
-        } catch(NullPointerException e) {
-            Log.e("ProfileERR", e.getMessage());
-            binding.nickname.setText("");
-            binding.bioField.setText(getString(R.string.error));
-            binding.saveProfileButton.setActivated(false);
-        }
+        EditText nicknameField = binding.nickname;
+        EditText bioField = binding.bioField;
+        FirebaseDatabase.getInstance().getReference("users").child(mAuth.getCurrentUser().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String nickname = String.valueOf(snapshot.child("nickname").getValue());
+                        String bio = String.valueOf(snapshot.child("bio").getValue());
+                        nicknameField.setText(nickname);
+                        bioField.setText(bio);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getContext(), R.string.error, Toast.LENGTH_LONG).show();
+                        Log.e("DatabaseERR", error.getMessage());
+                    }
+                });
 
         binding.saveProfileButton.setOnClickListener((v) -> {
-            MainActivity.getUserInfo().setNickname(binding.nickname.getText().toString());
-            MainActivity.getUserInfo().setBio(binding.bioField.getText().toString());
+            String nickname = binding.nickname.getText().toString().trim();
+            String bio = binding.bioField.getText().toString().trim();
+            if(nickname.length() == 0){
+                binding.nickname.setText("Chatman");
+                nickname = "Chatman";
+            }
+            HashMap<String, Object> update = new HashMap<>();
+            update.put("nickname", nickname);
+            update.put("bio", bio);
             mDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
-                    .setValue(MainActivity.getUserInfo()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    .updateChildren(update).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
@@ -68,6 +91,15 @@ public class ProfileFragment extends Fragment {
                 }
             });
         });
+
+        binding.logoutButton.setOnClickListener((v)->{
+            logout();
+        });
+    }
+
+    private void logout(){
+        mAuth.signOut();
+        startActivity(new Intent(getContext(), getActivity().getClass()));
     }
 
 

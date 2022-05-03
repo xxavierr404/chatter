@@ -37,4 +37,6 @@
     <string name="chat_name_field">Придумай что-то забавное!</string>
     <string name="button_create_chat_text">Создать</string>
     <string name="chat_created">Готово! Подожди, пока кто-то придёт.</string>
+    <string name="logout_button">Выйти</string>
+    <string name="no_chats_notice">Вас пока нет ни в одном чате. Воспользуйтесь вкладкой \"Finder\"!</string>
 </resources>

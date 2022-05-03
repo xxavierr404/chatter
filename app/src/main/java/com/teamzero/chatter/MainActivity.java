@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.Window;
 import android.widget.FrameLayout;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -32,12 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
-    private static User userInfo;
-
-    public static User getUserInfo(){
-        return userInfo;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame, new LoginFragment()).commit();
+        }
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_finder, R.id.navigation_chats, R.id.navigation_profile)
@@ -54,33 +54,5 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame, new LoginFragment()).commit();
-        } else {
-            FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid())
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            String nickname = String.valueOf(snapshot.child("nickname").getValue());
-                            String bio = String.valueOf(snapshot.child("bio").getValue());
-                            if (userInfo == null) userInfo = new User(nickname, bio);
-                            else {
-                                userInfo.setNickname(nickname);
-                                userInfo.setBio(bio);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Log.e("DatabaseERR", error.getMessage());
-                        }
-                    });
-        }
     }
 }

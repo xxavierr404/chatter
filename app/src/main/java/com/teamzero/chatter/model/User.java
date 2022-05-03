@@ -1,9 +1,21 @@
 package com.teamzero.chatter.model;
 
 import android.media.Image;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,15 +23,36 @@ import java.util.Set;
 public class User {
     private String nickname;
     private String bio;
-    private List<String> chatIDs;
+    private List<Object> chatIDs;
+
+    public User(){
+        chatIDs = new ArrayList<>();
+    }
+
+    public User(String uid){
+        FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        nickname = snapshot.child("nickname").getValue().toString();
+                        bio = snapshot.child("bio").getValue().toString();
+                        chatIDs = (List<Object>) snapshot.child("chatIDs");
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("DatabaseERR", error.getMessage());
+                    }
+                });
+    }
 
     public User(String nickname, String bio) {
         this.nickname = nickname;
         this.bio = bio;
-        chatIDs = new ArrayList<String>();
+        chatIDs = new ArrayList<Object>();
     }
 
-    public User(String nickname, String bio, ArrayList<String> chatIDs) {
+    public User(String nickname, String bio, List<Object> chatIDs) {
         this.nickname = nickname;
         this.bio = bio;
         this.chatIDs = chatIDs;
@@ -41,8 +74,12 @@ public class User {
         this.bio = bio;
     }
 
-    public List<String> getChatIDs() {
+    public List<Object> getChatIDs() {
         return chatIDs;
+    }
+
+    public void setChatIDs(List<Object> chatIDs){
+        this.chatIDs = chatIDs;
     }
 
     public void addChat(String chatID){
