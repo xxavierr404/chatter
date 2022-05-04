@@ -1,5 +1,12 @@
 package com.teamzero.chatter.model;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -7,20 +14,21 @@ import java.util.List;
 import java.util.Set;
 
 public class Chat {
+    private String id;
     private String name;
-    private final String adminUID;
+    private String adminUID;
     private List<String> members;
     private List<String> authorized;
     private List<String> tags;
     private List<String> messageIDs;
 
-    public Chat(String creator){
-        adminUID = creator;
-        name = "Middlespace";
-        members = new ArrayList<String>();
-        authorized = new ArrayList<String>();
-        tags = new ArrayList<String>();
-        messageIDs = new ArrayList<String>();
+    public Chat(String creatorID){
+        this.adminUID = creatorID;
+        this.name = "Unknown space";
+        this.members = new ArrayList<>();
+        this.authorized = new ArrayList<>();
+        this.tags = new ArrayList<>();
+        this.messageIDs = new ArrayList<>();
     }
 
     public Chat(String adminUID, ArrayList<String> members, String name,

@@ -29,7 +29,7 @@ public class User {
         chatIDs = new ArrayList<>();
     }
 
-    public User(String uid){
+/*    public User(String uid){
         FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -44,7 +44,7 @@ public class User {
                         Log.e("DatabaseERR", error.getMessage());
                     }
                 });
-    }
+    }*/
 
     public User(String nickname, String bio) {
         this.nickname = nickname;

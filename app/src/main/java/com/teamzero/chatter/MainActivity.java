@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {

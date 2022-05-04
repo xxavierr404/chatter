@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_finder">Поиск</string>
     <string name="title_chats">Чаты</string>
     <string name="title_profile">Профиль</string>
     <string name="prompt_password">Пароль</string>
@@ -39,4 +38,6 @@
     <string name="chat_created">Готово! Подожди, пока кто-то придёт.</string>
     <string name="logout_button">Выйти</string>
     <string name="no_chats_notice">Вас пока нет ни в одном чате. Воспользуйтесь вкладкой \"Finder\"!</string>
+    <string name="no_messages_yet">Пока этот чат пуст.</string>
+    <string name="check_connection">Пожалуйста, проверьте своё интернет соединение</string>
 </resources>
