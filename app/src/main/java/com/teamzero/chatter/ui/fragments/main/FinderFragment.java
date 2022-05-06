@@ -32,6 +32,7 @@ import com.teamzero.chatter.model.User;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -70,36 +71,24 @@ public class FinderFragment extends Fragment {
             if(!tags.isEmpty()){
                 List<String> tagsList = new ArrayList<String>(Arrays.asList(tags.replaceAll("\\s+","").split(",")));
                 tagsList.removeAll(Collections.singletonList(""));
-                if(tagsList.size() > 0) chat.setTags(tagsList);
+                for(String tag: tagsList){
+                    chat.addTag(tag);
+                }
             }
-            User user = new User();
-            mDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
-                    .child("chatIDs").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for(DataSnapshot dss: snapshot.getChildren()){
-                        user.addChat(dss.getValue().toString());
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-            user.addChat(key);
             mDatabase.getReference("chats").child(key)
                     .setValue(chat).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
                         mDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
-                                .child("chatIDs").setValue(user.getChatIDs()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                .child("chatIDs").child(key).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()) {
                                     Toast.makeText(getContext(), R.string.chat_created, Toast.LENGTH_LONG).show();
-                                    // TODO: 02.05.2022 Переход на фрагмент с новым чатом
+                                    getActivity().getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.frame, new ChatlogFragment(key))
+                                            .addToBackStack("chatWindow").commit();
                                 } else {
                                     Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
                                     Log.e("UserERR", task.getException().getMessage());

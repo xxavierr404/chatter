@@ -16,43 +16,28 @@ import com.google.firebase.database.ValueEventListener;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class User {
     private String nickname;
     private String bio;
-    private List<Object> chatIDs;
+    private List<String> chatIDs;
 
     public User(){
         chatIDs = new ArrayList<>();
     }
 
-/*    public User(String uid){
-        FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getUid())
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        nickname = snapshot.child("nickname").getValue().toString();
-                        bio = snapshot.child("bio").getValue().toString();
-                        chatIDs = (List<Object>) snapshot.child("chatIDs");
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e("DatabaseERR", error.getMessage());
-                    }
-                });
-    }*/
-
     public User(String nickname, String bio) {
         this.nickname = nickname;
         this.bio = bio;
-        chatIDs = new ArrayList<Object>();
+        chatIDs = new ArrayList<>();
     }
 
-    public User(String nickname, String bio, List<Object> chatIDs) {
+    public User(String nickname, String bio, List<String> chatIDs) {
         this.nickname = nickname;
         this.bio = bio;
         this.chatIDs = chatIDs;
@@ -74,11 +59,11 @@ public class User {
         this.bio = bio;
     }
 
-    public List<Object> getChatIDs() {
+    public List<String> getChatIDs() {
         return chatIDs;
     }
 
-    public void setChatIDs(List<Object> chatIDs){
+    public void setChatIDs(List<String> chatIDs){
         this.chatIDs = chatIDs;
     }
 

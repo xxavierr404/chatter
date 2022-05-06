@@ -9,8 +9,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Chat {
@@ -30,8 +32,8 @@ public class Chat {
         this.name = "Unknown space";
     }
 
-    public Chat(String adminUID, ArrayList<String> members, String name,
-                ArrayList<String> authorized, ArrayList<String> tags, ArrayList<String> messageIDs){
+    public Chat(String adminUID, List<String> members, String name,
+                List<String> authorized, List<String> tags, List<String> messageIDs){
         this.adminUID = adminUID;
         this.members = members;
         this.name = name;

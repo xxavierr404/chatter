@@ -1,26 +1,21 @@
 package com.teamzero.chatter.model;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import java.util.Map;
 
 public class Message {
     private String id;
     private String text;
     private String senderUID;
-    private Long timestamp;
+    private Map<String, String> timestamp;
+    private String destinationUID;
     private boolean read;
 
-    public Message(String id, String text, String senderUID, Long timestamp) {
+    public Message(String id, String text, String senderUID, Map<String, String> timestamp, String dest) {
         this.id = id;
         this.text = text;
         this.senderUID = senderUID;
         this.timestamp = timestamp;
+        this.destinationUID = dest;
         this.read = false;
     }
 
@@ -50,8 +45,15 @@ public class Message {
         this.read = true;
     }
 
-    public Long getTimestamp() {
+    public Map<String, String> getTimestamp() {
         return timestamp;
     }
 
+    public String getDestinationUID() {
+        return destinationUID;
+    }
+
+    public void setDestinationUID(String destinationUID) {
+        this.destinationUID = destinationUID;
+    }
 }

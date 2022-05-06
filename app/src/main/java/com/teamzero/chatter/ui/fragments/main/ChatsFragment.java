@@ -81,7 +81,7 @@ public class ChatsFragment extends Fragment{
                     chatList.setVisibility(View.VISIBLE);
                     noChatsNotice.setVisibility(View.GONE);
                     for(DataSnapshot snap: snapshot.getChildren()){
-                        chatIDs.add(snap.getValue().toString());
+                        chatIDs.add(snap.getKey());
                     }
                     for(String chatID: chatIDs){
                         mDatabase.getReference("chats").child(chatID).addValueEventListener(new ValueEventListener() {

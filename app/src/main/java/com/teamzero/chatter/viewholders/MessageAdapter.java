@@ -18,11 +18,16 @@ import com.teamzero.chatter.R;
 import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.model.Message;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
 
     private List<Message> messages;
+
+    public MessageAdapter(){
+        messages = new ArrayList<>();
+    }
 
     @NonNull
     @Override
@@ -61,6 +66,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @Override
     public int getItemCount() {
         return messages.size();
+    }
+
+    public void addMessage(Message message){
+        for(Message msg: messages){
+            if(msg.getId().equals(message.getId())) return;
+        }
+        messages.add(message);
     }
 
     class MessageViewHolder extends RecyclerView.ViewHolder{
