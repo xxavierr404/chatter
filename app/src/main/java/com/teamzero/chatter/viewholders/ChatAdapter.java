@@ -1,5 +1,6 @@
 package com.teamzero.chatter.viewholders;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.text.Layout;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +26,7 @@ import com.teamzero.chatter.R;
 import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.model.Chat;
 import com.teamzero.chatter.model.Message;
+import com.teamzero.chatter.ui.fragments.main.ChatlogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +34,11 @@ import java.util.List;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder> {
 
     private List<Chat> chatList;
-    private ItemClickListener listener;
+    private Context ctx;
 
-
-    public ChatAdapter(ItemClickListener listener){
+    public ChatAdapter(Context ctx){
         this.chatList = new ArrayList<>();
-        this.listener = listener;
+        this.ctx = ctx;
     }
 
     public void addChat(Chat chat){
@@ -81,7 +83,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onItemClick(chatList.get(position));
+                ((AppCompatActivity) ctx).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame, new ChatlogFragment(chat.getId()))
+                        .addToBackStack("chatWindow").commit();
             }
         });
     }
@@ -108,9 +112,5 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
             unreadIndicator = itemView.findViewById(R.id.unread_indicator);
             layout = itemView.findViewById(R.id.chatTab);
         }
-    }
-
-    public interface ItemClickListener{
-        public void onItemClick(Chat chat);
     }
 }

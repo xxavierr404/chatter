@@ -32,7 +32,7 @@ import com.teamzero.chatter.viewholders.ChatAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatsFragment extends Fragment implements ChatAdapter.ItemClickListener {
+public class ChatsFragment extends Fragment{
 
     private FragmentChatsBinding binding;
     private FirebaseDatabase mDatabase;
@@ -46,7 +46,7 @@ public class ChatsFragment extends Fragment implements ChatAdapter.ItemClickList
         mDatabase = Utils.getDatabase();
         mAuth = FirebaseAuth.getInstance();
         chatIDs = new ArrayList<>();
-        adapter = new ChatAdapter(this);
+        adapter = new ChatAdapter(getContext());
         View root = binding.getRoot();
         return root;
     }
@@ -113,10 +113,5 @@ public class ChatsFragment extends Fragment implements ChatAdapter.ItemClickList
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    @Override
-    public void onItemClick(Chat chat) {
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame, new ChatlogFragment(chat.getId())).addToBackStack("chatWindow").commit();
     }
 }
