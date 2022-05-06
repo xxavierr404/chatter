@@ -22,6 +22,8 @@ public class Chat {
     private List<String> tags;
     private List<String> messageIDs;
 
+    public Chat(){}
+
     public Chat(String creatorID){
         this.adminUID = creatorID;
         this.name = "Unknown space";

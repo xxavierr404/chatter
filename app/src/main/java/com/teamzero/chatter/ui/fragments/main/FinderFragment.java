@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.teamzero.chatter.MainActivity;
 import com.teamzero.chatter.R;
+import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.databinding.FragmentFinderBinding;
 import com.teamzero.chatter.model.Chat;
 import com.teamzero.chatter.model.User;
@@ -44,7 +45,7 @@ public class FinderFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentFinderBinding.inflate(inflater, container, false);
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance();
+        mDatabase = Utils.getDatabase();
         View root = binding.getRoot();
         return root;
     }

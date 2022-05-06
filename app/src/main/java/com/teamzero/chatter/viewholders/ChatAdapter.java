@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.teamzero.chatter.R;
+import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.model.Chat;
 import com.teamzero.chatter.model.Message;
 
@@ -45,7 +46,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
     @NonNull
     @Override
     public ChatInfoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ChatInfoHolder(LayoutInflater.from(ctx).inflate(R.layout.layout_chat_tab, parent));
+        return new ChatInfoHolder(LayoutInflater.from(ctx).inflate(R.layout.layout_chat_tab, parent, false));
     }
 
     @Override
@@ -59,8 +60,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
         }*/
         if(!chat.getMessageIDs().isEmpty()) {
             String lastMessageID = chat.getMessageIDs().get(chat.getMessageIDs().size() - 1);
-            Message lastMessageInfo = new Message(lastMessageID);
-            holder.lastMessage.setText(lastMessageInfo.getText());
+            Utils.getDatabase().getReference("messages").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    holder.lastMessage.setText(snapshot.getValue(Message.class).getText());
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         } else {
             holder.lastMessage.setText(R.string.no_messages_yet);
         }
@@ -68,7 +78,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
 
     @Override
     public int getItemCount() {
-        return 0;
+        return chatList.size();
     }
 
     class ChatInfoHolder extends RecyclerView.ViewHolder{

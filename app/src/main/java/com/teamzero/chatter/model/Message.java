@@ -15,29 +15,6 @@ public class Message {
     private String senderUID;
     private boolean read;
 
-    public Message(String id){
-        String[] messageData = new String[3];
-        FirebaseDatabase.getInstance().getReference("messages")
-                .child(id).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                messageData[0] = snapshot.child("id").getValue().toString();
-                messageData[1] = snapshot.child("senderUID").getValue().toString();
-                messageData[2] = snapshot.child("text").getValue().toString();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("MessageERR", error.getDetails());
-            }
-        });
-
-        id = messageData[0];
-        senderUID = messageData[1];
-        text = messageData[2];
-        read = false;
-    }
-
     public Message(String id, String text, String senderUID) {
         this.id = id;
         this.text = text;
@@ -45,9 +22,7 @@ public class Message {
         this.read = false;
     }
 
-    public Message(){
-        this.read = false;
-    }
+    public Message(){}
 
     public String getId() {
         return id;
