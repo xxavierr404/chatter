@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.teamzero.chatter.MainActivity;
 import com.teamzero.chatter.R;
 import com.teamzero.chatter.databinding.FragmentLoginBinding;
 import com.teamzero.chatter.ui.fragments.auth.register.RegisterFragment;
@@ -41,11 +43,9 @@ public class LoginFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         mAuth = FirebaseAuth.getInstance();
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         return binding.getRoot();
-
     }
 
     @Override
@@ -102,8 +102,7 @@ public class LoginFragment extends Fragment {
             if(task.isSuccessful()){
                 if(task.getResult().getUser().isEmailVerified()) {
                     Toast.makeText(getContext(), R.string.welcome, Toast.LENGTH_SHORT).show();
-                    getActivity().getSupportFragmentManager().beginTransaction().detach(this).commit();
-                    ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+                    startActivity(new Intent(getContext(), MainActivity.class));
                 } else {
                     Toast.makeText(getContext(), R.string.confirmation_sent, Toast.LENGTH_SHORT).show();
                 }

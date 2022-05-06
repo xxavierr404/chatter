@@ -17,20 +17,17 @@ public class Chat {
     private String id;
     private String name;
     private String adminUID;
-    private List<String> members;
-    private List<String> authorized;
-    private List<String> tags;
-    private List<String> messageIDs;
+    private List<String> members = new ArrayList<>();
+    private List<String> authorized = new ArrayList<>();
+    private List<String> tags = new ArrayList<>();
+    private List<String> messageIDs = new ArrayList<>();
 
     public Chat(){}
 
-    public Chat(String creatorID){
+    public Chat(String id, String creatorID){
+        this.id = id;
         this.adminUID = creatorID;
         this.name = "Unknown space";
-        this.members = new ArrayList<>();
-        this.authorized = new ArrayList<>();
-        this.tags = new ArrayList<>();
-        this.messageIDs = new ArrayList<>();
     }
 
     public Chat(String adminUID, ArrayList<String> members, String name,
@@ -105,5 +102,9 @@ public class Chat {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
     }
 }

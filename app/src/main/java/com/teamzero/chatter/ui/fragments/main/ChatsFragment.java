@@ -3,6 +3,7 @@ package com.teamzero.chatter.ui.fragments.main;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,7 +32,7 @@ import com.teamzero.chatter.viewholders.ChatAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatsFragment extends Fragment {
+public class ChatsFragment extends Fragment implements ChatAdapter.ItemClickListener {
 
     private FragmentChatsBinding binding;
     private FirebaseDatabase mDatabase;
@@ -43,8 +45,8 @@ public class ChatsFragment extends Fragment {
         binding = FragmentChatsBinding.inflate(inflater, container, false);
         mDatabase = Utils.getDatabase();
         mAuth = FirebaseAuth.getInstance();
-        adapter = new ChatAdapter(getContext());
         chatIDs = new ArrayList<>();
+        adapter = new ChatAdapter(this);
         View root = binding.getRoot();
         return root;
     }
@@ -53,11 +55,16 @@ public class ChatsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if(mAuth.getCurrentUser() == null) return;
+
         ProgressBar loading = binding.progressBar2;
         RecyclerView chatList = binding.chatRecycler;
         TextView noChatsNotice = binding.textChats;
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+
+        chatList.addItemDecoration(decoration);
         chatList.setLayoutManager(layoutManager);
         chatList.setAdapter(adapter);
 
@@ -76,7 +83,21 @@ public class ChatsFragment extends Fragment {
                     for(DataSnapshot snap: snapshot.getChildren()){
                         chatIDs.add(snap.getValue().toString());
                     }
-                    updateChats();
+                    for(String chatID: chatIDs){
+                        mDatabase.getReference("chats").child(chatID).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                adapter.addChat(snapshot.getValue(Chat.class));
+                                chatList.setAdapter(adapter);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
+                                Log.e("ChatERR", error.getMessage());
+                            }
+                        });
+                    }
                     loading.setVisibility(View.GONE);
                 }
             }
@@ -88,29 +109,14 @@ public class ChatsFragment extends Fragment {
         });
     }
 
-    private void updateChats(){
-        for(String chatID: chatIDs){
-            mDatabase.getReference("chats").child(chatID).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    synchronized (adapter) {
-                        adapter.addChat(snapshot.getValue(Chat.class));
-                        adapter.notify();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
-                    Log.e("ChatERR", error.getMessage());
-                }
-            });
-        }
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onItemClick(Chat chat) {
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame, new ChatlogFragment(chat.getId())).addToBackStack("chatWindow").commit();
     }
 }

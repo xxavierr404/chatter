@@ -42,4 +42,6 @@
     <string name="no_chats_notice">You have not joined any chat yet. Use \"Finder\" tab!</string>
     <string name="no_messages_yet">No messages in this chat yet.</string>
     <string name="check_connection">Please, check your internet connection</string>
+    <string name="message_hint">Write your message here...</string>
+    <!-- TODO: Remove or change this placeholder text -->
 </resources>

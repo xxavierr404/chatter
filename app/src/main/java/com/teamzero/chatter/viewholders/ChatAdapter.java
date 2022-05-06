@@ -3,6 +3,7 @@ package com.teamzero.chatter.viewholders;
 import android.content.Context;
 import android.net.Uri;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.teamzero.chatter.MainActivity;
 import com.teamzero.chatter.R;
 import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.model.Chat;
@@ -27,26 +31,25 @@ import java.util.List;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder> {
 
     private List<Chat> chatList;
-    private Context ctx;
+    private ItemClickListener listener;
 
-    public ChatAdapter(Context ctx, List<Chat> chatList){
-        this.ctx = ctx;
-        this.chatList = chatList;
-    }
 
-    public ChatAdapter(Context ctx){
-        this.ctx = ctx;
+    public ChatAdapter(ItemClickListener listener){
         this.chatList = new ArrayList<>();
+        this.listener = listener;
     }
 
     public void addChat(Chat chat){
+        for(Chat c: chatList){
+            if(c.getId().equals(chat.getId())) return;
+        }
         chatList.add(chat);
     }
 
     @NonNull
     @Override
     public ChatInfoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ChatInfoHolder(LayoutInflater.from(ctx).inflate(R.layout.layout_chat_tab, parent, false));
+        return new ChatInfoHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_chat_tab, parent, false));
     }
 
     @Override
@@ -60,7 +63,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
         }*/
         if(!chat.getMessageIDs().isEmpty()) {
             String lastMessageID = chat.getMessageIDs().get(chat.getMessageIDs().size() - 1);
-            Utils.getDatabase().getReference("messages").addValueEventListener(new ValueEventListener() {
+            Utils.getDatabase().getReference("messages").child(lastMessageID)
+        .addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     holder.lastMessage.setText(snapshot.getValue(Message.class).getText());
@@ -74,6 +78,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
         } else {
             holder.lastMessage.setText(R.string.no_messages_yet);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onItemClick(chatList.get(position));
+            }
+        });
     }
 
     @Override
@@ -87,6 +97,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
         TextView lastMessage;
         ImageView chatImage;
         ImageView unreadIndicator;
+        ConstraintLayout layout;
 
         public ChatInfoHolder(@NonNull View itemView) {
             super(itemView);
@@ -95,7 +106,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
             lastMessage = itemView.findViewById(R.id.last_message);
             chatImage = itemView.findViewById(R.id.chat_image);
             unreadIndicator = itemView.findViewById(R.id.unread_indicator);
+            layout = itemView.findViewById(R.id.chatTab);
         }
     }
 
+    public interface ItemClickListener{
+        public void onItemClick(Chat chat);
+    }
 }

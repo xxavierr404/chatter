@@ -7,6 +7,24 @@
     tools:context=".ui.fragments.main.FinderFragment">
 
     <TextView
+        android:id="@+id/finderTitle"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:paddingStart="20dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="20dp"
+        android:text="@string/title_finder"
+        android:textAlignment="viewStart"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
         android:id="@+id/finder_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +35,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/finderTitle"
         app:layout_constraintVertical_bias="0.023" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -103,6 +121,35 @@
         app:layout_constraintTop_toBottomOf="@+id/findChatBlock">
 
         <TextView
+            android:id="@+id/tags_title2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/tags_title"
+            android:textAlignment="viewStart"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.044"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editChatName" />
+
+        <EditText
+            android:id="@+id/editTagsForNew"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="@string/tags_hint"
+            android:inputType="textPersonName"
+            android:maxLength="64"
+            app:layout_constraintBottom_toTopOf="@+id/create_chat_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tags_title2" />
+
+        <TextView
             android:id="@+id/title_create_new"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -136,12 +183,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="4dp"
             android:ems="10"
             android:hint="@string/chat_name_field"
             android:inputType="textPersonName"
             android:maxLength="20"
-            app:layout_constraintBottom_toBottomOf="@id/create_chat_button"
+            app:layout_constraintBottom_toTopOf="@+id/tags_title2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -152,14 +199,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:text="@string/button_create_chat_text"
-            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editChatName" />
+            app:layout_constraintTop_toBottomOf="@+id/editTagsForNew" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

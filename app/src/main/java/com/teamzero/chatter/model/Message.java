@@ -13,12 +13,14 @@ public class Message {
     private String id;
     private String text;
     private String senderUID;
+    private Long timestamp;
     private boolean read;
 
-    public Message(String id, String text, String senderUID) {
+    public Message(String id, String text, String senderUID, Long timestamp) {
         this.id = id;
         this.text = text;
         this.senderUID = senderUID;
+        this.timestamp = timestamp;
         this.read = false;
     }
 
@@ -47,4 +49,9 @@ public class Message {
     public void setRead() {
         this.read = true;
     }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
 }

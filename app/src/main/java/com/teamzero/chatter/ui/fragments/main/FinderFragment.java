@@ -31,6 +31,7 @@ import com.teamzero.chatter.model.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,19 +56,22 @@ public class FinderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         final Button createChatButton = binding.createChatButton;
         final Button findChatButton = binding.findChatButton;
-        final EditText tags = binding.editTags;
+        final EditText tagsForExisting = binding.editTags;
+        final EditText tagsForNew = binding.editTagsForNew;
         final EditText newChatName = binding.editChatName;
-
-/*        if(!tags.getText().toString().trim().isEmpty()){
-            chat.setTags(Arrays.asList(tags.getText().toString().trim().split(",")));
-        }*/
 
         createChatButton.setOnClickListener((v)-> {
             String key = mDatabase.getReference("chats").push().getKey();
-            Chat chat = new Chat(mAuth.getCurrentUser().getUid());
+            Chat chat = new Chat(key, mAuth.getCurrentUser().getUid());
             chat.addMember(mAuth.getCurrentUser().getUid());
             String name = newChatName.getText().toString().trim();
+            String tags = tagsForNew.getText().toString().trim();
             if(!name.isEmpty()) chat.setName(name);
+            if(!tags.isEmpty()){
+                List<String> tagsList = new ArrayList<String>(Arrays.asList(tags.replaceAll("\\s+","").split(",")));
+                tagsList.removeAll(Collections.singletonList(""));
+                if(tagsList.size() > 0) chat.setTags(tagsList);
+            }
             User user = new User();
             mDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
                     .child("chatIDs").addListenerForSingleValueEvent(new ValueEventListener() {
