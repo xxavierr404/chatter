@@ -1,12 +1,15 @@
 package com.teamzero.chatter.model;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.ServerValue;
+
 import java.util.Map;
 
 public class Message {
     private String id;
     private String text;
     private String senderUID;
-    private Map<String, String> timestamp;
+    private Long timestamp;
     private String destinationUID;
     private boolean read;
 
@@ -14,7 +17,6 @@ public class Message {
         this.id = id;
         this.text = text;
         this.senderUID = senderUID;
-        this.timestamp = timestamp;
         this.destinationUID = dest;
         this.read = false;
     }
@@ -46,6 +48,11 @@ public class Message {
     }
 
     public Map<String, String> getTimestamp() {
+        return ServerValue.TIMESTAMP;
+    }
+
+    @Exclude
+    public Long getTimestampLong() {
         return timestamp;
     }
 

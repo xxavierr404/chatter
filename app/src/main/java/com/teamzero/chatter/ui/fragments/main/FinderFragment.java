@@ -85,6 +85,8 @@ public class FinderFragment extends Fragment {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()) {
+                                    tagsForNew.setText("");
+                                    newChatName.setText("");
                                     Toast.makeText(getContext(), R.string.chat_created, Toast.LENGTH_LONG).show();
                                     getActivity().getSupportFragmentManager().beginTransaction()
                                             .replace(R.id.frame, new ChatlogFragment(key))

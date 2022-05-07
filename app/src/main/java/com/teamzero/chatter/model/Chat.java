@@ -1,19 +1,9 @@
 package com.teamzero.chatter.model;
 
-import androidx.annotation.NonNull;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class Chat {
     private String id;
@@ -22,7 +12,7 @@ public class Chat {
     private List<String> members = new ArrayList<>();
     private List<String> authorized = new ArrayList<>();
     private List<String> tags = new ArrayList<>();
-    private List<String> messageIDs = new ArrayList<>();
+    private Map<String, Boolean> messageIDs = new HashMap<>();
 
     public Chat(){}
 
@@ -33,7 +23,7 @@ public class Chat {
     }
 
     public Chat(String adminUID, List<String> members, String name,
-                List<String> authorized, List<String> tags, List<String> messageIDs){
+                List<String> authorized, List<String> tags, Map<String, Boolean> messageIDs){
         this.adminUID = adminUID;
         this.members = members;
         this.name = name;
@@ -54,7 +44,7 @@ public class Chat {
         return authorized;
     }
 
-    public List<String> getMessageIDs() {
+    public Map<String, Boolean> getMessageIDs() {
         return messageIDs;
     }
 
@@ -79,7 +69,7 @@ public class Chat {
     }
 
     public void addMessage(String newMessageID){
-        messageIDs.add(newMessageID);
+        messageIDs.put(newMessageID, true);
     }
 
     public void removeMessage(String removedMessage){

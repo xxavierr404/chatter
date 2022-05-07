@@ -1,5 +1,7 @@
 package com.teamzero.chatter.viewholders;
 
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -23,7 +25,7 @@ import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
 
-    private List<Message> messages;
+    private final List<Message> messages;
 
     public MessageAdapter(){
         messages = new ArrayList<>();
@@ -32,13 +34,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @NonNull
     @Override
     public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_message, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
         Message message = messages.get(position);
-
+        Log.i("Debug", Integer.toString(messages.size()));
         holder.message.setText(message.getText());
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) holder.message.getLayoutParams();
         if(message.getSenderUID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
@@ -69,6 +71,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     }
 
     public void addMessage(Message message){
+        // TODO: 07.05.2022 Заменить onDataChange на листенер для child объектов
         for(Message msg: messages){
             if(msg.getId().equals(message.getId())) return;
         }

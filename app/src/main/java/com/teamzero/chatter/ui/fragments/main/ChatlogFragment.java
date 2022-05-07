@@ -90,7 +90,7 @@ public class ChatlogFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot snap: snapshot.getChildren()){
-                    String messageID = snap.getValue().toString();
+                    String messageID = snap.getKey();
                     mDatabase.getReference("messages").child(messageID).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -111,7 +111,7 @@ public class ChatlogFragment extends Fragment {
         });
 
         backButton.setOnClickListener((v)->{
-            getActivity().getSupportFragmentManager().popBackStack();
+            getActivity().getSupportFragmentManager().popBackStack("chatWindow", 1);
         });
 
         sendButton.setOnClickListener((v) -> {
@@ -127,7 +127,8 @@ public class ChatlogFragment extends Fragment {
                             if(task.isSuccessful()){
                                 mDatabase.getReference("chats").child(chatID)
                                         .child("messageIDs")
-                                        .child(key).push();
+                                        .child(key).setValue(true);
+                                messageField.setText("");
                             } else {
                                 Log.e("MessagesERR", task.getException().getMessage());
                                 Toast.makeText(getContext(), R.string.check_connection, Toast.LENGTH_LONG).show();

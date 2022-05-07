@@ -1,10 +1,6 @@
 package com.teamzero.chatter.viewholders;
 
-import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +8,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.teamzero.chatter.MainActivity;
 import com.teamzero.chatter.R;
 import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.model.Chat;
@@ -58,28 +53,55 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
     public void onBindViewHolder(@NonNull ChatInfoHolder holder, int position) {
         Chat chat = chatList.get(position);
 
+        holder.lastMessage.setText(R.string.no_messages_yet);
         holder.chatName.setText(chat.getName());
         // TODO: 04.05.2022 Установка изображения
 /*        if(chat.getImageURL() != null){
             holder.chatImage.setImageResource();
         }*/
-        if(!chat.getMessageIDs().isEmpty()) {
-            String lastMessageID = chat.getMessageIDs().get(chat.getMessageIDs().size() - 1);
-            Utils.getDatabase().getReference("messages").child(lastMessageID)
-        .addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    holder.lastMessage.setText(snapshot.getValue(Message.class).getText());
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+        Utils.getDatabase().getReference("chats").child(chat.getId())
+                .child("messageIDs").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Utils.getDatabase().getReference("messages").child(snapshot.getKey())
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                String text = snapshot.getValue(Message.class).getText();
+                                if(text.length() > 20){
+                                    text = text.substring(0, 17) + "...";
+                                }
+                                holder.lastMessage.setText(text);
+                            }
 
-                }
-            });
-        } else {
-            holder.lastMessage.setText(R.string.no_messages_yet);
-        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
