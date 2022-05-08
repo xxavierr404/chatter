@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.533"
-        tools:srcCompat="@drawable/astronaut" />
+        tools:src="@drawable/astronaut" />
 
     <TextView
         android:id="@+id/last_message"

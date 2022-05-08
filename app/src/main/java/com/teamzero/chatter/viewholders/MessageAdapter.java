@@ -50,11 +50,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         } else {
             params.horizontalBias = 0f;
             holder.message.setLayoutParams(params);
-            Utils.getDatabase().getReference("users").child(message.getSenderUID()).child("username")
+            Utils.getDatabase().getReference("users").child(message.getSenderUID()).child("nickname")
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            holder.author.setText(snapshot.getValue().toString());
+                            holder.author.setText(snapshot.getValue(String.class));
                         }
 
                         @Override

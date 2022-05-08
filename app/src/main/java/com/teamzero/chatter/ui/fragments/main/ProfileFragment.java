@@ -36,6 +36,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
 import com.teamzero.chatter.MainActivity;
 import com.teamzero.chatter.R;
+import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.databinding.FragmentProfileBinding;
 import com.teamzero.chatter.model.Message;
 import com.teamzero.chatter.model.User;
@@ -152,6 +153,7 @@ public class ProfileFragment extends Fragment {
 
 
     private void logout(){
+        Utils.closeConnection();
         mAuth.signOut();
         startActivity(new Intent(getContext(), getActivity().getClass()));
     }

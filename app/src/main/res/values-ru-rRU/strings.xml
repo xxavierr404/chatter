@@ -41,4 +41,7 @@
     <string name="no_messages_yet">Пока этот чат пуст.</string>
     <string name="check_connection">Пожалуйста, проверьте своё интернет соединение</string>
     <string name="message_hint">Вводите сообщение здесь...</string>
+    <string name="empty_chat">Пока здесь нет ничего, кроме звёздной пыли.</string>
+    <string name="chat_not_found">Похоже, пока больше нет чатов с такими тегами...</string>
+    <string name="welcome_new_chat">Добро пожаловать в новую вселенную!</string>
 </resources>

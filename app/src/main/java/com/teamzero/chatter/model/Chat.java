@@ -9,9 +9,9 @@ public class Chat {
     private String id;
     private String name;
     private String adminUID;
-    private List<String> members = new ArrayList<>();
-    private List<String> authorized = new ArrayList<>();
-    private List<String> tags = new ArrayList<>();
+    private Map<String, Boolean> members = new HashMap<>();
+    private Map<String, Boolean> authorized = new HashMap<>();
+    private Map<String, Boolean> tags = new HashMap<>();
     private Map<String, Boolean> messageIDs = new HashMap<>();
 
     public Chat(){}
@@ -22,8 +22,8 @@ public class Chat {
         this.name = "Unknown space";
     }
 
-    public Chat(String adminUID, List<String> members, String name,
-                List<String> authorized, List<String> tags, Map<String, Boolean> messageIDs){
+    public Chat(String adminUID, Map<String, Boolean> members, String name,
+                Map<String, Boolean> authorized, Map<String, Boolean> tags, Map<String, Boolean> messageIDs){
         this.adminUID = adminUID;
         this.members = members;
         this.name = name;
@@ -36,11 +36,11 @@ public class Chat {
         return adminUID;
     }
 
-    public List<String> getMembers() {
+    public Map<String, Boolean> getMembers() {
         return members;
     }
 
-    public List<String> getAuthorized() {
+    public Map<String, Boolean> getAuthorized() {
         return authorized;
     }
 
@@ -48,12 +48,12 @@ public class Chat {
         return messageIDs;
     }
 
-    public List<String> getTags() {
+    public Map<String, Boolean> getTags() {
         return tags;
     }
 
     public void addAuthorized(String newModerator){
-        authorized.add(newModerator);
+        authorized.put(newModerator, true);
     }
 
     public void removeAuthorized(String notModeratorAnymore){
@@ -61,7 +61,7 @@ public class Chat {
     }
 
     public void addMember(String newMember){
-        members.add(newMember);
+        members.put(newMember, true);
     }
 
     public void kickMember(String wasMember){
@@ -77,10 +77,10 @@ public class Chat {
     }
 
     public void addTag(String newTag){
-        tags.add(newTag);
+        tags.put(newTag, true);
     }
 
-    public void setTags(List<String> tags){
+    public void setTags(Map<String, Boolean> tags){
         this.tags = tags;
     }
 

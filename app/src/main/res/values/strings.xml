@@ -43,5 +43,8 @@
     <string name="no_messages_yet">No messages in this chat yet.</string>
     <string name="check_connection">Please, check your internet connection</string>
     <string name="message_hint">Write your message here...</string>
+    <string name="empty_chat">Nothing except stardust here... yet.</string>
+    <string name="chat_not_found">It seems there are no more chats with these tags...</string>
+    <string name="welcome_new_chat">Welcome to new universe!</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

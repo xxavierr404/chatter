@@ -45,8 +45,6 @@ public class ChatsFragment extends Fragment{
         binding = FragmentChatsBinding.inflate(inflater, container, false);
         mDatabase = Utils.getDatabase();
         mAuth = FirebaseAuth.getInstance();
-        chatIDs = new ArrayList<>();
-        adapter = new ChatAdapter(getContext());
         View root = binding.getRoot();
         return root;
     }
@@ -57,11 +55,13 @@ public class ChatsFragment extends Fragment{
 
         if(mAuth.getCurrentUser() == null) return;
 
+        adapter = new ChatAdapter(getContext());
+
         ProgressBar loading = binding.progressBar2;
         RecyclerView chatList = binding.chatRecycler;
         TextView noChatsNotice = binding.textChats;
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, true);
         DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
 
         chatList.addItemDecoration(decoration);

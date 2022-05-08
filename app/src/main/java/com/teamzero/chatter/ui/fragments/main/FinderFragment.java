@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +37,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class FinderFragment extends Fragment {
@@ -60,6 +63,62 @@ public class FinderFragment extends Fragment {
         final EditText tagsForExisting = binding.editTags;
         final EditText tagsForNew = binding.editTagsForNew;
         final EditText newChatName = binding.editChatName;
+
+        findChatButton.setOnClickListener((v) -> {
+            String tags = tagsForExisting.getText().toString().trim();
+            HashSet<String> tagsSet = new HashSet<>(Arrays.asList(tags.replaceAll("\\s+","").split(",")));
+            tagsSet.removeAll(Collections.singletonList(""));
+            mDatabase.getReference("chats").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    ArrayList<String> candidates = new ArrayList<>();
+                    for(DataSnapshot snap: snapshot.getChildren()){
+                        if(((Map)snap.child("tags").getValue()).keySet().containsAll(tagsSet)
+                        && !((Map)snap.child("members").getValue()).keySet().contains(mAuth.getCurrentUser().getUid())) {
+                            candidates.add(snap.child("id").getValue(String.class));
+                        }
+                    }
+                    if(candidates.size() == 0){
+                        Toast.makeText(getContext(), R.string.chat_not_found, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    Collections.shuffle(candidates);
+                    mDatabase.getReference("chats").child(candidates.get(0))
+                            .child("members").child(mAuth.getCurrentUser().getUid())
+                            .setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            mDatabase.getReference().child("users")
+                                    .child(mAuth.getCurrentUser().getUid())
+                                    .child("chatIDs")
+                                    .child(candidates.get(0))
+                                    .setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(getContext(), R.string.welcome_new_chat, Toast.LENGTH_SHORT).show();
+                                    getActivity().getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.frame, new ChatlogFragment(candidates.get(0)))
+                                            .addToBackStack("chatWindow").commit();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
+                                    Log.e("FinderERR", e.getMessage());
+                                }
+                            });
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
+                    Log.e("FinderERR", error.getMessage());
+                }
+            });
+        });
 
         createChatButton.setOnClickListener((v)-> {
             String key = mDatabase.getReference("chats").push().getKey();

@@ -13,6 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -28,12 +29,21 @@ import com.google.firebase.database.ValueEventListener;
 import com.teamzero.chatter.databinding.ActivityMainBinding;
 import com.teamzero.chatter.model.User;
 import com.teamzero.chatter.ui.fragments.auth.login.LoginFragment;
+import com.teamzero.chatter.ui.fragments.main.ChatsFragment;
+import com.teamzero.chatter.ui.fragments.main.FinderFragment;
+import com.teamzero.chatter.ui.fragments.main.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
     private FirebaseAuth mAuth;
+
+    private final ChatsFragment chatsFragment = new ChatsFragment();
+    private final FinderFragment finderFragment = new FinderFragment();
+    private final ProfileFragment profileFragment = new ProfileFragment();
+    private Fragment activeFragment = chatsFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         if (currentUser == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame, new LoginFragment()).commit();
         }
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_finder, R.id.navigation_chats, R.id.navigation_profile)

@@ -1,6 +1,7 @@
 package com.teamzero.chatter.viewholders;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.teamzero.chatter.model.Message;
 import com.teamzero.chatter.ui.fragments.main.ChatlogFragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder> {
@@ -51,7 +53,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
 
     @Override
     public void onBindViewHolder(@NonNull ChatInfoHolder holder, int position) {
+
         Chat chat = chatList.get(position);
+        HashMap<String, ChatlogFragment> chatFragments = new HashMap<>();
 
         holder.lastMessage.setText(R.string.no_messages_yet);
         holder.chatName.setText(chat.getName());
@@ -105,8 +109,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!chatFragments.containsKey(chat.getId())) {
+                    Log.i("ChatINF", "Created new chatlog window");
+                    chatFragments.put(chat.getId(), new ChatlogFragment(chat.getId()));
+                }
                 ((AppCompatActivity) ctx).getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame, new ChatlogFragment(chat.getId()))
+                        .replace(R.id.frame, chatFragments.get(chat.getId()))
                         .addToBackStack("chatWindow").commit();
             }
         });

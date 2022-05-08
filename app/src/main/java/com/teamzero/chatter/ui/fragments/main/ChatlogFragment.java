@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -65,6 +66,7 @@ public class ChatlogFragment extends Fragment {
         ImageButton sendButton = binding.send;
         ImageButton uploadButton = binding.upload;
         TextView chatName = binding.chatTitle;
+        TextView emptyChatNotice = binding.emptyChatNotice;
         RecyclerView mainWindow = binding.chatHistoryView;
         EditText messageField = binding.messageField;
 
@@ -86,23 +88,37 @@ public class ChatlogFragment extends Fragment {
             }
         });
 
-        mDatabase.getReference("chats").child(chatID).child("messageIDs").addValueEventListener(new ValueEventListener() {
+        mDatabase.getReference("chats").child(chatID).child("messageIDs").addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot snap: snapshot.getChildren()){
-                    String messageID = snap.getKey();
-                    mDatabase.getReference("messages").child(messageID).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            messageAdapter.addMessage(snapshot.getValue(Message.class));
-                            mainWindow.setAdapter(messageAdapter);
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                        }
-                        });
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String messageID = snapshot.getKey();
+                mDatabase.getReference("messages").child(messageID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        emptyChatNotice.setVisibility(View.GONE);
+                        messageAdapter.addMessage(snapshot.getValue(Message.class));
+                        mainWindow.setAdapter(messageAdapter);
                     }
-                }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
