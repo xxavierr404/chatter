@@ -104,19 +104,6 @@
         app:layout_constraintTop_toBottomOf="@+id/saveProfileButton"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
-        android:id="@+id/profilePicture"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:clickable="true"
-        android:contentDescription="@string/user_avatar"
-        android:focusable="true"
-        app:layout_constraintBottom_toTopOf="@+id/nickname"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profileTitle"
-        tools:srcCompat="@drawable/astronaut" />
-
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
@@ -128,5 +115,25 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="70dp"
+        app:layout_constraintBottom_toTopOf="@+id/nickname"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profileTitle">
+
+        <ImageView
+            android:id="@+id/profilePicture"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:clickable="true"
+            android:contentDescription="@string/user_avatar"
+            android:focusable="true"
+            tools:srcCompat="@drawable/astronaut" />
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

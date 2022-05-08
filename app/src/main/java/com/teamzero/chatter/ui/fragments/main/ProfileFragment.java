@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
 import com.teamzero.chatter.MainActivity;
@@ -41,6 +42,7 @@ import com.teamzero.chatter.databinding.FragmentProfileBinding;
 import com.teamzero.chatter.model.Message;
 import com.teamzero.chatter.model.User;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,6 +100,18 @@ public class ProfileFragment extends Fragment {
                         String bio = String.valueOf(snapshot.child("bio").getValue());
                         nicknameField.setText(nickname);
                         bioField.setText(bio);
+                        FirebaseStorage.getInstance().getReference("profile_pics").child(mAuth.getCurrentUser().getUid())
+                        .child("profile.jpg").getFile(new File(getActivity().getApplicationInfo().dataDir, "profile.jpg"))
+                            .addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
+                                    if (task.isSuccessful()){
+                                        profilePicture.setImageURI(Uri.fromFile(new File(getActivity().getApplicationInfo().dataDir, "profile.jpg")));
+                                    } else {
+                                        Log.e("ProfileERR", task.getException().getMessage());
+                                    }
+                                }
+                            });
                         loading.setVisibility(View.GONE);
                     }
 

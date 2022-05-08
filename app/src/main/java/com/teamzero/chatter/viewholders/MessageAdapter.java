@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,7 +41,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
         Message message = messages.get(position);
-        Log.i("Debug", Integer.toString(messages.size()));
         holder.message.setText(message.getText());
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) holder.message.getLayoutParams();
         if(message.getSenderUID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
@@ -71,10 +71,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     }
 
     public void addMessage(Message message){
-        // TODO: 07.05.2022 Заменить onDataChange на листенер для child объектов
-        for(Message msg: messages){
-            if(msg.getId().equals(message.getId())) return;
-        }
         messages.add(message);
     }
 
@@ -82,11 +78,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         TextView author;
         TextView message;
+        ImageView authorPic;
         ConstraintLayout layout;
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
             author = itemView.findViewById(R.id.author);
+            authorPic = itemView.findViewById(R.id.profilePicture);
             message = itemView.findViewById(R.id.message);
             layout = itemView.findViewById(R.id.messageLayout);
         }
