@@ -3,13 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/code/Chatter/app/src/main/res/drawable/gradient.xml" value="0.1285" />
+        <entry key="..\:/code/Chatter/app/src/main/res/drawable/ic_back.xml" value="0.1285" />
+        <entry key="..\:/code/Chatter/app/src/main/res/drawable/ic_chat_opts.xml" value="0.1285" />
+        <entry key="..\:/code/Chatter/app/src/main/res/drawable/ic_chats.xml" value="0.1285" />
+        <entry key="..\:/code/Chatter/app/src/main/res/drawable/ic_finder.xml" value="0.1285" />
+        <entry key="..\:/code/Chatter/app/src/main/res/drawable/ic_logout.xml" value="0.1285" />
+        <entry key="..\:/code/Chatter/app/src/main/res/drawable/ic_profile.xml" value="0.1285" />
+        <entry key="..\:/code/Chatter/app/src/main/res/drawable/ic_report.xml" value="0.1285" />
+        <entry key="..\:/code/Chatter/app/src/main/res/drawable/ic_send.xml" value="0.1285" />
+        <entry key="..\:/code/Chatter/app/src/main/res/drawable/ic_upload.xml" value="0.1285" />
         <entry key="..\:/code/Chatter/app/src/main/res/drawable/in_message.xml" value="0.135" />
         <entry key="..\:/code/Chatter/app/src/main/res/drawable/in_message_with_tail.xml" value="0.135" />
         <entry key="..\:/code/Chatter/app/src/main/res/drawable/out_message.xml" value="0.16" />
-        <entry key="..\:/code/Chatter/app/src/main/res/drawable/out_message_with_tail.xml" value="0.1" />
+        <entry key="..\:/code/Chatter/app/src/main/res/drawable/out_message_with_tail.xml" value="0.2" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/activity_main.xml" value="0.176" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_chat_options.xml" value="0.17083333333333334" />
-        <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_chatlog.xml" value="0.36505190311418684" />
+        <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_chatlog.xml" value="0.2" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_chats.xml" value="0.2" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_dialogue.xml" value="0.1" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_finder.xml" value="0.264" />

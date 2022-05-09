@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +38,8 @@ import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
 
+    RecyclerView recyclerView;
+
     private final List<Message> messages;
     private Context ctx;
 
@@ -49,6 +52,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @NonNull
     @Override
     public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        recyclerView = (RecyclerView) parent;
         return new MessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_message, parent, false));
     }
 
@@ -58,11 +62,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         holder.message.setText(message.getText());
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) holder.message.getLayoutParams();
         if(message.getSenderUID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+            holder.message.setBackground(AppCompatResources.getDrawable(ctx, R.drawable.out_message_with_tail));
             holder.author.setVisibility(View.GONE);
             holder.authorPic.setVisibility(View.GONE);
             params.horizontalBias = 1f;
             holder.message.setLayoutParams(params);
         } else {
+            holder.message.setBackground(AppCompatResources.getDrawable(ctx, R.drawable.in_message_with_tail));
             params.horizontalBias = 0f;
             holder.message.setLayoutParams(params);
             Glide.with(ctx)

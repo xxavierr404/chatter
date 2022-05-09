@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?android:attr/colorBackground"
     android:clickable="true"
     tools:context=".ui.fragments.main.ProfileFragment">
 
@@ -79,13 +79,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.91" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/saveProfileButton"
+        style="@style/Widget.Material3.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/saveProfile"
+        android:textSize="16sp"
+        app:icon="@drawable/ic_upload"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -93,20 +96,23 @@
         app:layout_constraintTop_toBottomOf="@+id/bioField"
         app:layout_constraintVertical_bias="0.322" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/logoutButton"
+        style="@style/Widget.Material3.Button"
         android:layout_width="155dp"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="56dp"
         android:text="@string/logout_button"
+        android:textSize="16sp"
+        app:icon="@drawable/ic_logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/saveProfileButton"
-        app:layout_constraintVertical_bias="0.245" />
+        app:layout_constraintVertical_bias="0.276" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -142,15 +148,20 @@
 
     <ImageButton
         android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="?attr/actionModeCloseDrawable"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/black"
+        android:gravity="center"
+        android:scaleType="fitCenter"
+        app:cornerRadius="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.088"
+        app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/saveProfileButton"
-        app:layout_constraintVertical_bias="0.179" />
+        app:layout_constraintVertical_bias="0.173"
+        app:srcCompat="@drawable/ic_back"
+        />
 
     <ImageView
         android:id="@+id/presenceIndicator"

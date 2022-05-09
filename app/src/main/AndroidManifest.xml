@@ -20,6 +20,9 @@
         <meta-data
             android:name="com.teamzero.chatter.messaging.default_notification_color"
             android:resource="@color/white" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <service
             android:name=".Messaging"
