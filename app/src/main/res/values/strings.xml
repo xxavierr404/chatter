@@ -46,5 +46,16 @@
     <string name="empty_chat">Nothing except stardust here... yet.</string>
     <string name="chat_not_found">It seems there are no more chats with these tags...</string>
     <string name="welcome_new_chat">Welcome to new universe!</string>
+    <string name="chat_options_title">Chat settings</string>
+    <string name="edit_chat_button">Edit chat</string>
+    <string name="leave_chat_button">Leave chat</string>
+    <string name="delete_chat_button">Delete chat</string>
+    <string name="left_chat">See you, space cowboy...</string>
+    <string name="alert_are_you_sure">Are you sure?</string>
+    <string name="alert_cannot_be_undone">This action cannot be undone.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="chat_info_title">Chat info</string>
+    <string name="chat_description">Chat description:</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

@@ -12,13 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:elevation="16dp"
+        app:contentInsetStart="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:contentInsetStart="0dp">
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -36,18 +36,6 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/chatImage"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="32dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/editChatButton"
-                app:layout_constraintHorizontal_bias="0.209"
-                app:layout_constraintStart_toEndOf="@id/closeChatButton"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/chatTitle"
@@ -71,6 +59,24 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/avatarCard"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:cardCornerRadius="70dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/chatTitle"
+                app:layout_constraintHorizontal_bias="0.876"
+                app:layout_constraintStart_toEndOf="@id/closeChatButton"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/chatImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    tools:src="@tools:sample/avatars" />
+            </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

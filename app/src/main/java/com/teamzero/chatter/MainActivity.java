@@ -1,36 +1,19 @@
 package com.teamzero.chatter;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.Window;
-import android.widget.FrameLayout;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.teamzero.chatter.databinding.ActivityMainBinding;
-import com.teamzero.chatter.model.User;
 import com.teamzero.chatter.ui.fragments.auth.login.LoginFragment;
 import com.teamzero.chatter.ui.fragments.main.ChatsFragment;
 import com.teamzero.chatter.ui.fragments.main.FinderFragment;
@@ -65,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame, new LoginFragment()).commit();
             return;
         }
+
+        profileFragment.setId(mAuth.getCurrentUser().getUid());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 

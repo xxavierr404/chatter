@@ -9,6 +9,7 @@ public class Chat {
     private String id;
     private String name;
     private String adminUID;
+    private String desc;
     private Map<String, Boolean> members = new HashMap<>();
     private Map<String, Boolean> authorized = new HashMap<>();
     private Map<String, Boolean> tags = new HashMap<>();
@@ -19,7 +20,8 @@ public class Chat {
     public Chat(String id, String creatorID){
         this.id = id;
         this.adminUID = creatorID;
-        this.name = "Unknown space";
+        this.name = "Voidspace";
+        this.desc = "This place was just discovered.";
     }
 
     public Chat(String adminUID, Map<String, Boolean> members, String name,
@@ -98,5 +100,13 @@ public class Chat {
 
     public String getId() {
         return id;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }

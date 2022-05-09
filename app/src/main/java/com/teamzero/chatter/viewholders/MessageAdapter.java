@@ -1,5 +1,6 @@
 package com.teamzero.chatter.viewholders;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +29,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.teamzero.chatter.R;
 import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.model.Message;
+import com.teamzero.chatter.ui.fragments.main.ProfileFragment;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -81,6 +84,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                             holder.author.setText("???");
                         }
                     });
+            holder.authorPic.setOnClickListener((v)->{
+                ((AppCompatActivity)ctx).getSupportFragmentManager().beginTransaction().replace(R.id.frame, new ProfileFragment(message.getSenderUID(), false))
+                        .addToBackStack("otherProfile").commit();
+            });
         }
     }
 

@@ -14,10 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.teamzero.chatter.R;
 import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.model.Chat;
@@ -39,6 +41,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
     }
 
     public void addChat(Chat chat){
+        for(Chat c: chatList){
+            if(c.getId().equals(chat.getId())) return;
+        }
         chatList.add(chat);
     }
 
@@ -55,6 +60,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
         chatList.remove(chat);
     }
 
+    public void clear(){
+        chatList.clear();
+    }
+
     @NonNull
     @Override
     public ChatInfoHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -69,10 +78,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
 
         holder.lastMessage.setText(R.string.no_messages_yet);
         holder.chatName.setText(chat.getName());
-        // TODO: 04.05.2022 Установка изображения
-/*        if(chat.getImageURL() != null){
-            holder.chatImage.setImageResource();
-        }*/
+        Glide.with(ctx)
+                .load(FirebaseStorage.getInstance().getReference("chat_pics")
+                .child(chat.getId()).child("avatar.jpg"))
+                .placeholder(R.drawable.astronaut)
+                .into(holder.chatImage);
 
         Utils.getDatabase().getReference("chats").child(chat.getId())
                 .child("messageIDs").addChildEventListener(new ChildEventListener() {
@@ -122,9 +132,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
                 if(!chatFragments.containsKey(chat.getId())) {
                     Log.i("ChatINF", "Created new chatlog window");
                     chatFragments.put(chat.getId(), new ChatlogFragment(chat.getId()));
+                    ((AppCompatActivity) ctx).getSupportFragmentManager().beginTransaction()
+                            .add(R.id.frame, chatFragments.get(chat.getId()))
+                            .addToBackStack("chatWindow").commit();
+                    return;
                 }
                 ((AppCompatActivity) ctx).getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame, chatFragments.get(chat.getId()))
+                        .show(chatFragments.get(chat.getId()))
                         .addToBackStack("chatWindow").commit();
             }
         });

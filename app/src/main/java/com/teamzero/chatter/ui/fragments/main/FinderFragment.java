@@ -73,8 +73,9 @@ public class FinderFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     ArrayList<String> candidates = new ArrayList<>();
                     for(DataSnapshot snap: snapshot.getChildren()){
-                        if(((Map)snap.child("tags").getValue()).keySet().containsAll(tagsSet)
-                        && !((Map)snap.child("members").getValue()).keySet().contains(mAuth.getCurrentUser().getUid())) {
+                        if(((snap.child("tags").getValue() == null
+                        && tags.isEmpty()) || (snap.child("tags").getValue() != null && ((Map)snap.child("tags").getValue()).keySet().containsAll(tagsSet))
+                        && !((Map)snap.child("members").getValue()).keySet().contains(mAuth.getCurrentUser().getUid()))) {
                             candidates.add(snap.child("id").getValue(String.class));
                         }
                     }

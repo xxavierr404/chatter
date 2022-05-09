@@ -44,4 +44,15 @@
     <string name="empty_chat">Пока здесь нет ничего, кроме звёздной пыли.</string>
     <string name="chat_not_found">Похоже, пока больше нет чатов с такими тегами...</string>
     <string name="welcome_new_chat">Добро пожаловать в новую вселенную!</string>
+    <string name="chat_options_title">Настройки чата</string>
+    <string name="edit_chat_button">Редактировать чат</string>
+    <string name="leave_chat_button">Покинуть чат</string>
+    <string name="delete_chat_button">Удалить чат</string>
+    <string name="left_chat">Увидимся позже, космоковбой...</string>
+    <string name="alert_are_you_sure">Ты уверен?</string>
+    <string name="alert_cannot_be_undone">Это действие нельзя отменить.</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="chat_info_title">Сведения о чате</string>
+    <string name="chat_description">Описание чата:</string>
 </resources>

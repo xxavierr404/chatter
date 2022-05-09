@@ -14,9 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,10 +29,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.teamzero.chatter.R;
 import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.databinding.FragmentChatlogBinding;
+import com.teamzero.chatter.model.Chat;
 import com.teamzero.chatter.model.Message;
+import com.teamzero.chatter.ui.fragments.ChatOptionsFragment;
 import com.teamzero.chatter.viewholders.ChatAdapter;
 import com.teamzero.chatter.viewholders.MessageAdapter;
 
@@ -65,6 +70,7 @@ public class ChatlogFragment extends Fragment {
         ImageButton editButton = binding.editChatButton;
         ImageButton sendButton = binding.send;
         ImageButton uploadButton = binding.upload;
+        ImageView chatImage = binding.chatImage;
         TextView chatName = binding.chatTitle;
         TextView emptyChatNotice = binding.emptyChatNotice;
         RecyclerView mainWindow = binding.chatHistoryView;
@@ -76,10 +82,17 @@ public class ChatlogFragment extends Fragment {
         mainWindow.setAdapter(messageAdapter);
         mainWindow.setLayoutManager(layoutManager);
 
+        Glide.with(this)
+                .load(FirebaseStorage.getInstance().getReference("chat_pics")
+                        .child(chatID).child("avatar.jpg"))
+                .placeholder(R.drawable.astronaut)
+                .into(chatImage);
+
         mDatabase.getReference("chats").child(chatID).child("name").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                chatName.setText(snapshot.getValue().toString());
+                chatName.setText(snapshot.getValue(String.class));
+
             }
 
             @Override
@@ -98,6 +111,7 @@ public class ChatlogFragment extends Fragment {
                         emptyChatNotice.setVisibility(View.GONE);
                         messageAdapter.addMessage(snapshot.getValue(Message.class));
                         mainWindow.setAdapter(messageAdapter);
+                        mainWindow.scrollToPosition(messageAdapter.getItemCount()-1);
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
@@ -127,7 +141,22 @@ public class ChatlogFragment extends Fragment {
         });
 
         backButton.setOnClickListener((v)->{
-            getActivity().getSupportFragmentManager().popBackStack("chatWindow", 1);
+            getActivity().getSupportFragmentManager().beginTransaction().hide(this).commit();
+        });
+
+        editButton.setOnClickListener((v)->{
+            mDatabase.getReference("chats").child(chatID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.frame, new ChatOptionsFragment(snapshot.getValue(Chat.class)))
+                            .addToBackStack("chatOptions").commit();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         });
 
         sendButton.setOnClickListener((v) -> {
