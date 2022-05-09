@@ -71,7 +71,7 @@ public class ChatlogFragment extends Fragment {
         EditText messageField = binding.messageField;
 
         MessageAdapter messageAdapter = new MessageAdapter(getContext());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, true);
 
         mainWindow.setAdapter(messageAdapter);
         mainWindow.setLayoutManager(layoutManager);

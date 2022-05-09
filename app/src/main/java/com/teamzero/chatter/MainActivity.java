@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
-        manager.beginTransaction().add(R.id.nav_host_fragment_activity_main, finderFragment, "Finder").hide(finderFragment)
+/*        manager.beginTransaction().add(R.id.nav_host_fragment_activity_main, finderFragment, "Finder").hide(finderFragment)
                 .add(R.id.nav_host_fragment_activity_main, profileFragment, "Profile").hide(profileFragment)
                 .add(R.id.nav_host_fragment_activity_main, chatsFragment, "Chats").commit();
 
@@ -94,13 +94,13 @@ public class MainActivity extends AppCompatActivity {
                         return false;
                 }
             }
-        });
+        });*/
 
-/*        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_finder, R.id.navigation_chats, R.id.navigation_profile)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);*/
+        NavigationUI.setupWithNavController(binding.navView, navController);
     }
 }

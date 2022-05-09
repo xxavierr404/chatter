@@ -1,5 +1,7 @@
 package com.teamzero.chatter.model;
 
+import com.teamzero.chatter.MessageLiveData;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +15,7 @@ public class Chat {
     private Map<String, Boolean> authorized = new HashMap<>();
     private Map<String, Boolean> tags = new HashMap<>();
     private Map<String, Boolean> messageIDs = new HashMap<>();
+    private MessageLiveData messages;
 
     public Chat(){}
 

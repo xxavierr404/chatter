@@ -18,6 +18,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.teamzero.chatter.MessageViewModel;
 import com.teamzero.chatter.R;
 import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.model.Chat;
@@ -38,21 +39,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
         this.ctx = ctx;
     }
 
-    public void addChat(Chat chat){
-        chatList.add(chat);
-    }
-
-    public void updateChat(Chat chat){
-        for(Chat c: chatList){
-            if(c.getId().equals(chat.getId())) {
-                c = chat;
-                return;
-            }
-        }
-    }
-
-    public void removeChat(Chat chat){
-        chatList.remove(chat);
+    public void setChatList(List<Chat> chatList){
+        this.chatList = chatList;
     }
 
     @NonNull
@@ -75,39 +63,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
         }*/
 
         Utils.getDatabase().getReference("chats").child(chat.getId())
-                .child("messageIDs").addChildEventListener(new ChildEventListener() {
+                .child("messageIDs").orderByKey().limitToLast(1).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Utils.getDatabase().getReference("messages").child(snapshot.getKey())
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                String text = snapshot.getValue(Message.class).getText();
-                                if(text.length() > 50){
-                                    text = text.substring(0, 47) + "...";
-                                }
-                                holder.lastMessage.setText(text);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+/*                holder.lastMessage.setText(snapshot.getValue());*/
             }
 
             @Override

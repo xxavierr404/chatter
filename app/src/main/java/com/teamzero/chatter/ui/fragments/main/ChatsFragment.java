@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.teamzero.chatter.ChatlistViewModel;
 import com.teamzero.chatter.R;
 import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.databinding.FragmentChatsBinding;
@@ -36,24 +38,16 @@ import java.util.List;
 
 public class ChatsFragment extends Fragment{
 
-    private View root;
     private FragmentChatsBinding binding;
     private FirebaseDatabase mDatabase;
     private FirebaseAuth mAuth;
     private ChatAdapter adapter;
-    private boolean noChats = true;
-    List<String> chatIDs = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        if(root == null){
-            binding = FragmentChatsBinding.inflate(inflater, container, false);
-            root = binding.getRoot();
-            return root;
-        }
-        else {
-            return root;
-        }
+        binding = FragmentChatsBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+        return root;
     }
 
     @Override
@@ -78,81 +72,10 @@ public class ChatsFragment extends Fragment{
         chatList.setLayoutManager(layoutManager);
         chatList.setAdapter(adapter);
 
-        DatabaseReference chatRef = mDatabase.getReference("chats");
-
-        if (noChats) {
-            noChatsNotice.setVisibility(View.VISIBLE);
-        }
-
-        mDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
-                .child("chatIDs").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                chatRef.child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(noChats){
-                            noChats = false;
-                            noChatsNotice.setVisibility(View.GONE);
-                        }
-                        adapter.addChat(snapshot.getValue(Chat.class));
-                        synchronized (adapter) {
-                            adapter.notify();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                chatRef.child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        adapter.updateChat(snapshot.getValue(Chat.class));
-                        synchronized (adapter) {
-                            adapter.notify();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                chatRef.child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        adapter.removeChat(snapshot.getValue(Chat.class));
-                        synchronized (adapter) {
-                            adapter.notify();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+        ChatlistViewModel model = new ViewModelProvider(this).get(ChatlistViewModel.class);
+        model.getChatlist().observe(getViewLifecycleOwner(), (chats) -> {
+            adapter.setChatList(chats);
+            adapter.notifyDataSetChanged();
         });
 
 /*        mDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
