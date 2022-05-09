@@ -70,7 +70,7 @@ public class ChatlogFragment extends Fragment {
         RecyclerView mainWindow = binding.chatHistoryView;
         EditText messageField = binding.messageField;
 
-        MessageAdapter messageAdapter = new MessageAdapter();
+        MessageAdapter messageAdapter = new MessageAdapter(getContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 
         mainWindow.setAdapter(messageAdapter);

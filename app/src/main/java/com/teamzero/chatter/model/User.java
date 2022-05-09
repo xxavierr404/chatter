@@ -26,6 +26,7 @@ public class User {
     private String nickname;
     private String bio;
     private List<String> chatIDs;
+    private String pictureMD5;
 
     public User(){
         chatIDs = new ArrayList<>();
@@ -73,5 +74,13 @@ public class User {
 
     public void removeChat(String chatID){
         chatIDs.remove(chatID);
+    }
+
+    public String getPictureMD5() {
+        return pictureMD5;
+    }
+
+    public void setPictureMD5(String pictureMD5) {
+        this.pictureMD5 = pictureMD5;
     }
 }

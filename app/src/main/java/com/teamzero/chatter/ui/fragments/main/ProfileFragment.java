@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,10 +59,6 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance();
-        mStorage = FirebaseStorage.getInstance();
-        newPicUri = null;
         return binding.getRoot();
     }
 
@@ -86,6 +83,14 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        if(mAuth.getCurrentUser() == null) return;
+
+        mDatabase = Utils.getDatabase();
+        mStorage = FirebaseStorage.getInstance();
+
         EditText nicknameField = binding.nickname;
         EditText bioField = binding.bioField;
         ImageView profilePicture = binding.profilePicture;
@@ -96,22 +101,18 @@ public class ProfileFragment extends Fragment {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(mAuth.getCurrentUser() == null) return;
                         String nickname = String.valueOf(snapshot.child("nickname").getValue());
                         String bio = String.valueOf(snapshot.child("bio").getValue());
                         nicknameField.setText(nickname);
                         bioField.setText(bio);
-                        FirebaseStorage.getInstance().getReference("profile_pics").child(mAuth.getCurrentUser().getUid())
-                        .child("profile.jpg").getFile(new File(getActivity().getApplicationInfo().dataDir, "profile.jpg"))
-                            .addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
-                                    if (task.isSuccessful()){
-                                        profilePicture.setImageURI(Uri.fromFile(new File(getActivity().getApplicationInfo().dataDir, "profile.jpg")));
-                                    } else {
-                                        Log.e("ProfileERR", task.getException().getMessage());
-                                    }
-                                }
-                            });
+                        Glide.with(getContext())
+                                .load(FirebaseStorage.getInstance()
+                                        .getReference("profile_pics")
+                                        .child(mAuth.getCurrentUser().getUid())
+                                        .child("profile.jpg"))
+                                .placeholder(R.drawable.astronaut)
+                                .into(profilePicture);
                         loading.setVisibility(View.GONE);
                     }
 

@@ -19,8 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.teamzero.chatter.R;
@@ -34,27 +36,35 @@ import java.util.List;
 
 public class ChatsFragment extends Fragment{
 
+    private View root;
     private FragmentChatsBinding binding;
     private FirebaseDatabase mDatabase;
     private FirebaseAuth mAuth;
     private ChatAdapter adapter;
+    private boolean noChats = true;
     List<String> chatIDs = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentChatsBinding.inflate(inflater, container, false);
-        mDatabase = Utils.getDatabase();
-        mAuth = FirebaseAuth.getInstance();
-        View root = binding.getRoot();
-        return root;
+        if(root == null){
+            binding = FragmentChatsBinding.inflate(inflater, container, false);
+            root = binding.getRoot();
+            return root;
+        }
+        else {
+            return root;
+        }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mAuth = FirebaseAuth.getInstance();
+
         if(mAuth.getCurrentUser() == null) return;
 
+        mDatabase = Utils.getDatabase();
         adapter = new ChatAdapter(getContext());
 
         ProgressBar loading = binding.progressBar2;
@@ -68,15 +78,89 @@ public class ChatsFragment extends Fragment{
         chatList.setLayoutManager(layoutManager);
         chatList.setAdapter(adapter);
 
-        loading.setVisibility(View.VISIBLE);
+        DatabaseReference chatRef = mDatabase.getReference("chats");
+
+        if (noChats) {
+            noChatsNotice.setVisibility(View.VISIBLE);
+        }
+
         mDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
+                .child("chatIDs").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                chatRef.child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(noChats){
+                            noChats = false;
+                            noChatsNotice.setVisibility(View.GONE);
+                        }
+                        adapter.addChat(snapshot.getValue(Chat.class));
+                        synchronized (adapter) {
+                            adapter.notify();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                chatRef.child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        adapter.updateChat(snapshot.getValue(Chat.class));
+                        synchronized (adapter) {
+                            adapter.notify();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                chatRef.child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        adapter.removeChat(snapshot.getValue(Chat.class));
+                        synchronized (adapter) {
+                            adapter.notify();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+/*        mDatabase.getReference("users").child(mAuth.getCurrentUser().getUid())
                 .child("chatIDs").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.getChildrenCount() == 0) {
-                    chatList.setVisibility(View.GONE);
-                    loading.setVisibility(View.GONE);
-                    noChatsNotice.setVisibility(View.VISIBLE);
+
                 } else {
                     chatList.setVisibility(View.VISIBLE);
                     noChatsNotice.setVisibility(View.GONE);
@@ -88,7 +172,7 @@ public class ChatsFragment extends Fragment{
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 adapter.addChat(snapshot.getValue(Chat.class));
-                                chatList.setAdapter(adapter);
+                                adapter.notifyItemInserted();
                             }
 
                             @Override
@@ -106,7 +190,7 @@ public class ChatsFragment extends Fragment{
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        });*/
     }
 
     @Override

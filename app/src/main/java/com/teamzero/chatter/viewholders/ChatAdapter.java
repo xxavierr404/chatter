@@ -39,10 +39,20 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
     }
 
     public void addChat(Chat chat){
-        for(Chat c: chatList){
-            if(c.getId().equals(chat.getId())) return;
-        }
         chatList.add(chat);
+    }
+
+    public void updateChat(Chat chat){
+        for(Chat c: chatList){
+            if(c.getId().equals(chat.getId())) {
+                c = chat;
+                return;
+            }
+        }
+    }
+
+    public void removeChat(Chat chat){
+        chatList.remove(chat);
     }
 
     @NonNull
@@ -73,8 +83,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 String text = snapshot.getValue(Message.class).getText();
-                                if(text.length() > 20){
-                                    text = text.substring(0, 17) + "...";
+                                if(text.length() > 50){
+                                    text = text.substring(0, 47) + "...";
                                 }
                                 holder.lastMessage.setText(text);
                             }
