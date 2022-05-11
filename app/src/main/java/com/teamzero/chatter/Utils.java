@@ -9,6 +9,8 @@ import com.bumptech.glide.Registry;
 import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -24,15 +26,18 @@ public class Utils extends AppGlideModule {
 
     private static FirebaseDatabase mDatabase;
     private static String connectionKey;
+    private static boolean connected;
 
     public static FirebaseDatabase getDatabase(){
-        if(mDatabase == null){
+        if(mDatabase == null || !connected){
             mDatabase = FirebaseDatabase.getInstance();
-            mDatabase.setPersistenceEnabled(true);
+/*            mDatabase.setPersistenceEnabled(true);
+            mDatabase.getReference().child("chats").keepSynced(true);*/
             DatabaseReference ref = mDatabase.getReference("users").child(FirebaseAuth.getInstance()
                     .getCurrentUser().getUid()).child("connections");
             connectionKey = ref.push().getKey();
             ref.child(connectionKey).setValue(true);
+            connected = true;
             ref.child(connectionKey).onDisconnect().removeValue();
         }
         return mDatabase;
@@ -49,9 +54,11 @@ public class Utils extends AppGlideModule {
     }
 
     public static void closeConnection(){
+        mDatabase.getReference(connectionKey).onDisconnect().cancel();
         mDatabase.getReference("users").child(FirebaseAuth.getInstance()
                 .getCurrentUser().getUid()).child("connections").child(connectionKey)
-        .removeValue();
+                .removeValue();
+        connected = false;
     }
 
     @Override

@@ -71,11 +71,13 @@ public class FinderFragment extends Fragment {
             mDatabase.getReference("chats").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for(DataSnapshot dss: snapshot.getChildren()){
+                        Log.i("DEBUG", dss.getValue(Chat.class).getName());
+                    }
                     ArrayList<String> candidates = new ArrayList<>();
                     for(DataSnapshot snap: snapshot.getChildren()){
-                        if(((snap.child("tags").getValue() == null
-                        && tags.isEmpty()) || (snap.child("tags").getValue() != null && ((Map)snap.child("tags").getValue()).keySet().containsAll(tagsSet))
-                        && !((Map)snap.child("members").getValue()).keySet().contains(mAuth.getCurrentUser().getUid()))) {
+                        if((tagsSet.size() == 0 || (snap.child("tags").exists() && ((Map)snap.child("tags").getValue()).keySet().containsAll(tagsSet)))
+                            && !((Map)snap.child("members").getValue()).containsKey(mAuth.getCurrentUser().getUid())){
                             candidates.add(snap.child("id").getValue(String.class));
                         }
                     }

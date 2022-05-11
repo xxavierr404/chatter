@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        Utils.getDatabase();
         profileFragment.setId(mAuth.getCurrentUser().getUid());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
