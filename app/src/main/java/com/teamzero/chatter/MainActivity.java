@@ -65,15 +65,21 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch(item.getItemId()){
                     case R.id.navigation_chats:
-                        manager.beginTransaction().hide(currentFragment).show(chatsFragment).commit();
+                        manager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in, R.anim.fade_out)
+                                .hide(currentFragment).show(chatsFragment).commit();
                         currentFragment = chatsFragment;
                         return true;
                     case R.id.navigation_finder:
-                        manager.beginTransaction().hide(currentFragment).show(finderFragment).commit();
+                        manager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in, R.anim.fade_out)
+                                .hide(currentFragment).show(finderFragment).commit();
                         currentFragment = finderFragment;
                         return true;
                     case R.id.navigation_profile:
-                        manager.beginTransaction().hide(currentFragment).show(profileFragment).commit();
+                        manager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_in, R.anim.fade_out)
+                                .hide(currentFragment).show(profileFragment).commit();
                         currentFragment = profileFragment;
                         return true;
                     default:

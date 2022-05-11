@@ -133,11 +133,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
                     Log.i("ChatINF", "Created new chatlog window");
                     chatFragments.put(chat.getId(), new ChatlogFragment(chat.getId()));
                     ((AppCompatActivity) ctx).getSupportFragmentManager().beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_vertical, R.anim.slide_out_vertical)
                             .add(R.id.frame, chatFragments.get(chat.getId()))
                             .addToBackStack("chatWindow").commit();
                     return;
                 }
                 ((AppCompatActivity) ctx).getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_vertical, R.anim.slide_out_vertical)
                         .show(chatFragments.get(chat.getId()))
                         .addToBackStack("chatWindow").commit();
             }

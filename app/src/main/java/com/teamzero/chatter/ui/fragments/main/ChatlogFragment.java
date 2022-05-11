@@ -141,14 +141,20 @@ public class ChatlogFragment extends Fragment {
         });
 
         backButton.setOnClickListener((v)->{
-            getActivity().getSupportFragmentManager().beginTransaction().hide(this).commit();
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_vertical, R.anim.slide_out_vertical)
+                    .hide(this).commit();
         });
 
         editButton.setOnClickListener((v)->{
             mDatabase.getReference("chats").child(chatID).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.frame, new ChatOptionsFragment(snapshot.getValue(Chat.class)))
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
+                            .add(R.id.frame, new ChatOptionsFragment(snapshot.getValue(Chat.class)))
                             .addToBackStack("chatOptions").commit();
                 }
 
