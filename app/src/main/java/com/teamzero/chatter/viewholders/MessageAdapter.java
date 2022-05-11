@@ -91,7 +91,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                         }
                     });
             holder.authorPic.setOnClickListener((v)->{
-                ((AppCompatActivity)ctx).getSupportFragmentManager().beginTransaction().replace(R.id.frame, new ProfileFragment(message.getSenderUID(), false))
+                ((AppCompatActivity)ctx).getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
+                        .add(R.id.frame, new ProfileFragment(message.getSenderUID(), false))
                         .addToBackStack("otherProfile").commit();
             });
         }

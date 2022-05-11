@@ -66,14 +66,12 @@ public class FinderFragment extends Fragment {
 
         findChatButton.setOnClickListener((v) -> {
             String tags = tagsForExisting.getText().toString().trim();
+            tagsForExisting.setText("");
             HashSet<String> tagsSet = new HashSet<>(Arrays.asList(tags.replaceAll("\\s+","").split(",")));
             tagsSet.removeAll(Collections.singletonList(""));
             mDatabase.getReference("chats").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for(DataSnapshot dss: snapshot.getChildren()){
-                        Log.i("DEBUG", dss.getValue(Chat.class).getName());
-                    }
                     ArrayList<String> candidates = new ArrayList<>();
                     for(DataSnapshot snap: snapshot.getChildren()){
                         if((tagsSet.size() == 0 || (snap.child("tags").exists() && ((Map)snap.child("tags").getValue()).keySet().containsAll(tagsSet)))
@@ -100,6 +98,7 @@ public class FinderFragment extends Fragment {
                                 public void onSuccess(Void unused) {
                                     Toast.makeText(getContext(), R.string.welcome_new_chat, Toast.LENGTH_SHORT).show();
                                     getActivity().getSupportFragmentManager().beginTransaction()
+                                            .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
                                             .replace(R.id.frame, new ChatlogFragment(candidates.get(0)))
                                             .addToBackStack("chatWindow").commit();
                                 }
