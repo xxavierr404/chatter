@@ -71,6 +71,7 @@ public class ChatsFragment extends Fragment{
         chatList.addItemDecoration(decoration);
         chatList.setLayoutManager(layoutManager);
         chatList.setAdapter(adapter);
+        chatList.setItemViewCacheSize(32);
 
         DatabaseReference chatRef = mDatabase.getReference("chats");
 

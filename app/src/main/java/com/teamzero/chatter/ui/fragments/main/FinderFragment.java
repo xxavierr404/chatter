@@ -68,7 +68,7 @@ public class FinderFragment extends Fragment {
         final MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.chat_found);
 
         findChatButton.setOnClickListener((v) -> {
-            String tags = tagsForExisting.getText().toString().trim();
+            String tags = tagsForExisting.getText().toString().toLowerCase().trim();
             tagsForExisting.setText("");
             HashSet<String> tagsSet = new HashSet<>(Arrays.asList(tags.replaceAll("\\s+","").split(",")));
             tagsSet.removeAll(Collections.singletonList(""));
@@ -132,7 +132,7 @@ public class FinderFragment extends Fragment {
             Chat chat = new Chat(key, mAuth.getCurrentUser().getUid());
             chat.addMember(mAuth.getCurrentUser().getUid());
             String name = newChatName.getText().toString().trim();
-            String tags = tagsForNew.getText().toString().trim();
+            String tags = tagsForNew.getText().toString().toLowerCase().trim();
             if(!name.isEmpty()) chat.setName(name);
             if(!tags.isEmpty()){
                 List<String> tagsList = new ArrayList<String>(Arrays.asList(tags.replaceAll("\\s+","").split(",")));

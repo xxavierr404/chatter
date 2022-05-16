@@ -50,6 +50,7 @@ public class ChatlogFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private String chatID;
+    private ChatlogFragment self = this;
 
     public ChatlogFragment(){}
 
@@ -87,6 +88,7 @@ public class ChatlogFragment extends Fragment {
 
         mainWindow.setAdapter(messageAdapter);
         mainWindow.setLayoutManager(layoutManager);
+        mainWindow.setItemViewCacheSize(128);
 
         Glide.with(this)
                 .load(FirebaseStorage.getInstance().getReference("chat_pics")
@@ -175,7 +177,7 @@ public class ChatlogFragment extends Fragment {
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()
                             .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                            .add(R.id.frame, new ChatOptionsFragment(snapshot.getValue(Chat.class)))
+                            .add(R.id.frame, new ChatOptionsFragment(snapshot.getValue(Chat.class), self))
                             .addToBackStack("chatOptions").commit();
                 }
 

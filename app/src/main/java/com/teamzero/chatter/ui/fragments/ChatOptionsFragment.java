@@ -22,6 +22,7 @@ import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.databinding.FragmentChatOptionsBinding;
 import com.teamzero.chatter.databinding.FragmentChatlogBinding;
 import com.teamzero.chatter.model.Chat;
+import com.teamzero.chatter.ui.fragments.main.ChatlogFragment;
 import com.teamzero.chatter.ui.fragments.main.ProfileFragment;
 
 public class ChatOptionsFragment extends Fragment {
@@ -30,9 +31,11 @@ public class ChatOptionsFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private Chat chat;
+    private ChatlogFragment fragment;
 
-    public ChatOptionsFragment(Chat chat){
+    public ChatOptionsFragment(Chat chat, ChatlogFragment fragment){
         this.chat = chat;
+        this.fragment = fragment;
     }
 
     @Override
@@ -67,8 +70,8 @@ public class ChatOptionsFragment extends Fragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 switch(i){
                     case DialogInterface.BUTTON_POSITIVE: {
-                        getActivity().getSupportFragmentManager().popBackStack("chatWindow", 1);
                         getActivity().getSupportFragmentManager().popBackStack("chatOptions", 1);
+                        getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
                         mDatabase.getReference("chats").child(chat.getId()).removeValue();
                         for (String userID : chat.getMembers().keySet()) {
                             mDatabase.getReference("users").child(userID).child("chatIDs").child(chat.getId()).removeValue();
@@ -89,8 +92,8 @@ public class ChatOptionsFragment extends Fragment {
                     case DialogInterface.BUTTON_POSITIVE: {
                         mDatabase.getReference("chats").child(chat.getId()).child("members").child(currentID).removeValue();
                         mDatabase.getReference("users").child(currentID).child("chatIDs").child(chat.getId()).removeValue();
-                        getActivity().getSupportFragmentManager().popBackStack("chatWindow", 1);
                         getActivity().getSupportFragmentManager().popBackStack("chatOptions", 1);
+                        getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
                         Toast.makeText(getContext(), R.string.left_chat, Toast.LENGTH_SHORT).show();
                         mp.start();
                         break;

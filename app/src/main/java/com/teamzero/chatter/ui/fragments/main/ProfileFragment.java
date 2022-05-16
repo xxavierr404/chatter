@@ -272,7 +272,7 @@ public class ProfileFragment extends Fragment {
                                 binding.nickname.setText("Unknown space");
                                 nickname = "Unknown space";
                             }
-                            HashSet<String> tagsSet = new HashSet<>(Arrays.asList(tags.getText().toString().trim().replaceAll("\\s+","").split(",")));
+                            HashSet<String> tagsSet = new HashSet<>(Arrays.asList(tags.getText().toString().toLowerCase().trim().replaceAll("\\s+","").split(",")));
                             tagsSet.removeAll(Collections.singletonList(""));
                             HashMap<String, Object> update = new HashMap<>();
                             for(String tag: tagsSet){
