@@ -1,5 +1,7 @@
 package com.teamzero.chatter.ui.fragments.main;
 
+import android.media.MediaActionSound;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,12 +65,14 @@ public class FinderFragment extends Fragment {
         final EditText tagsForExisting = binding.editTags;
         final EditText tagsForNew = binding.editTagsForNew;
         final EditText newChatName = binding.editChatName;
+        final MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.chat_found);
 
         findChatButton.setOnClickListener((v) -> {
             String tags = tagsForExisting.getText().toString().trim();
             tagsForExisting.setText("");
             HashSet<String> tagsSet = new HashSet<>(Arrays.asList(tags.replaceAll("\\s+","").split(",")));
             tagsSet.removeAll(Collections.singletonList(""));
+            mDatabase.getReference("chats").push();
             mDatabase.getReference("chats").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -97,6 +101,7 @@ public class FinderFragment extends Fragment {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Toast.makeText(getContext(), R.string.welcome_new_chat, Toast.LENGTH_SHORT).show();
+                                    mp.start();
                                     getActivity().getSupportFragmentManager().beginTransaction()
                                             .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
                                             .replace(R.id.frame, new ChatlogFragment(candidates.get(0)))
@@ -148,9 +153,10 @@ public class FinderFragment extends Fragment {
                                 if(task.isSuccessful()) {
                                     tagsForNew.setText("");
                                     newChatName.setText("");
+                                    mp.start();
                                     Toast.makeText(getContext(), R.string.chat_created, Toast.LENGTH_LONG).show();
                                     getActivity().getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.frame, new ChatlogFragment(key))
+                                            .add(R.id.frame, new ChatlogFragment(key))
                                             .addToBackStack("chatWindow").commit();
                                 } else {
                                     Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();

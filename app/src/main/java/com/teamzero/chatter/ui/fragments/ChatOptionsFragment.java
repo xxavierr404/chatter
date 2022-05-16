@@ -2,6 +2,7 @@ package com.teamzero.chatter.ui.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,7 @@ public class ChatOptionsFragment extends Fragment {
         Button leaveChat = binding.leaveChat;
         Button deleteChat = binding.deleteChat;
         ImageButton close = binding.closeSettings;
+        final MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.chat_deleted);
 
         close.setOnClickListener((v)->{
             getActivity().getSupportFragmentManager().popBackStack("chatOptions", 1);
@@ -72,6 +74,7 @@ public class ChatOptionsFragment extends Fragment {
                             mDatabase.getReference("users").child(userID).child("chatIDs").child(chat.getId()).removeValue();
                         }
                         Toast.makeText(getContext(), R.string.left_chat, Toast.LENGTH_SHORT).show();
+                        mp.start();
                         break;
                     }
                     case DialogInterface.BUTTON_NEGATIVE: break;
@@ -89,6 +92,7 @@ public class ChatOptionsFragment extends Fragment {
                         getActivity().getSupportFragmentManager().popBackStack("chatWindow", 1);
                         getActivity().getSupportFragmentManager().popBackStack("chatOptions", 1);
                         Toast.makeText(getContext(), R.string.left_chat, Toast.LENGTH_SHORT).show();
+                        mp.start();
                         break;
                     }
                     case DialogInterface.BUTTON_NEGATIVE: break;
@@ -111,6 +115,8 @@ public class ChatOptionsFragment extends Fragment {
         });
 
         if(chat.getAdminUID().equals(currentID) || chat.getAuthorized().containsKey(currentID)){
+
+            leaveChat.setEnabled(false);
 
             deleteChat.setOnClickListener((v) -> {
                 builder.setTitle(R.string.alert_are_you_sure).setMessage(R.string.alert_cannot_be_undone)

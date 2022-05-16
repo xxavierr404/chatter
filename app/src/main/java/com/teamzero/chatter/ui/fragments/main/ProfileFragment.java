@@ -22,9 +22,12 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -88,7 +91,6 @@ public class ProfileFragment extends Fragment {
                             if (data != null && data.getData() != null) {
                                 newPicUri = data.getData();
                                 Glide.with(getContext()).load(newPicUri).into(binding.profilePicture);
-                                binding.profilePicture.setImageURI(newPicUri);
                             }
                         }
                     }
@@ -124,6 +126,8 @@ public class ProfileFragment extends Fragment {
         indicator.setVisibility(View.GONE);
         tags.setVisibility(View.GONE);
 
+        // TODO: 16.05.2022 Упростить ужасное повторение кода, следующее далее
+
         if(!isChat) {
 
             DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
@@ -135,6 +139,7 @@ public class ProfileFragment extends Fragment {
                                 .child(id)
                                 .child("profile.jpg"))
                         .error(R.drawable.astronaut)
+                        .signature(new ObjectKey(System.currentTimeMillis()))
                         .into(profilePicture);
             }
             usersRef.child(id)
@@ -171,6 +176,7 @@ public class ProfileFragment extends Fragment {
                             .child(id)
                             .child("avatar.jpg"))
                     .error(R.drawable.astronaut)
+                    .signature(new ObjectKey(System.currentTimeMillis()))
                     .into(profilePicture);
             usersRef.child(id)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -318,9 +324,12 @@ public class ProfileFragment extends Fragment {
 
 
     private void logout(){
-        Utils.closeConnection();
-        mAuth.signOut();
+        synchronized (mAuth) {
+            Utils.closeConnection();
+            mAuth.signOut();
+        }
         Toast.makeText(getContext(), R.string.left_chat, Toast.LENGTH_SHORT).show();
+        ((AppCompatActivity)getActivity()).getSupportFragmentManager().popBackStack("Initial", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         startActivity(new Intent(getContext(), getActivity().getClass()));
     }
 

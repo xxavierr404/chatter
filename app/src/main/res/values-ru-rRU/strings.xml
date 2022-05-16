@@ -55,4 +55,5 @@
     <string name="no">Нет</string>
     <string name="chat_info_title">Сведения о чате</string>
     <string name="chat_description">Описание чата:</string>
+    <string name="online_counter">%1$d участников, %2$d в сети.</string>
 </resources>

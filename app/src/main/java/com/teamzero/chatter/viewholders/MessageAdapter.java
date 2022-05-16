@@ -18,6 +18,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -77,6 +78,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                             .child(message.getSenderUID())
                             .child("profile.jpg"))
                     .placeholder(R.drawable.astronaut)
+                    .signature(new ObjectKey(System.currentTimeMillis()))
                     .into(holder.authorPic);
             Utils.getDatabase().getReference("users").child(message.getSenderUID()).child("nickname")
                     .addValueEventListener(new ValueEventListener() {

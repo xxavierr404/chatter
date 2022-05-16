@@ -57,4 +57,5 @@
     <string name="no">No</string>
     <string name="chat_info_title">Chat info</string>
     <string name="chat_description">Chat description:</string>
+    <string name="online_counter">%1$d members, %2$d online.</string>
 </resources>

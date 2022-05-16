@@ -15,11 +15,12 @@
         <entry key="..\:/code/Chatter/app/src/main/res/drawable/ic_upload.xml" value="0.1285" />
         <entry key="..\:/code/Chatter/app/src/main/res/drawable/in_message.xml" value="0.135" />
         <entry key="..\:/code/Chatter/app/src/main/res/drawable/in_message_with_tail.xml" value="0.135" />
+        <entry key="..\:/code/Chatter/app/src/main/res/drawable/logo.xml" value="0.1285" />
         <entry key="..\:/code/Chatter/app/src/main/res/drawable/out_message.xml" value="0.16" />
         <entry key="..\:/code/Chatter/app/src/main/res/drawable/out_message_with_tail.xml" value="0.2" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/activity_main.xml" value="0.176" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_chat_options.xml" value="0.17083333333333334" />
-        <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_chatlog.xml" value="0.2" />
+        <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_chatlog.xml" value="0.536" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_chats.xml" value="0.2" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_dialogue.xml" value="0.1" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_finder.xml" value="0.264" />
@@ -29,7 +30,7 @@
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_profile.xml" value="0.264" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_register.xml" value="0.176" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/layout_chat_options.xml" value="0.1828125" />
-        <entry key="..\:/code/Chatter/app/src/main/res/layout/layout_chat_tab.xml" value="0.4" />
+        <entry key="..\:/code/Chatter/app/src/main/res/layout/layout_chat_tab.xml" value="0.6" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/layout_chat_title_bar.xml" value="0.264" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/layout_message.xml" value="0.264" />
         <entry key="..\:/code/Chatter/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25416666666666665" />

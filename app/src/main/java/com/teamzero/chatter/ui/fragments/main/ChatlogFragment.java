@@ -1,5 +1,6 @@
 package com.teamzero.chatter.ui.fragments.main;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,6 +51,8 @@ public class ChatlogFragment extends Fragment {
     private FirebaseDatabase mDatabase;
     private String chatID;
 
+    public ChatlogFragment(){}
+
     public ChatlogFragment(String chatID){
         this.chatID = chatID;
     }
@@ -73,8 +77,10 @@ public class ChatlogFragment extends Fragment {
         ImageView chatImage = binding.chatImage;
         TextView chatName = binding.chatTitle;
         TextView emptyChatNotice = binding.emptyChatNotice;
+        TextView members = binding.membersCount;
         RecyclerView mainWindow = binding.chatHistoryView;
         EditText messageField = binding.messageField;
+        final MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.message);
 
         MessageAdapter messageAdapter = new MessageAdapter(getContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -86,13 +92,28 @@ public class ChatlogFragment extends Fragment {
                 .load(FirebaseStorage.getInstance().getReference("chat_pics")
                         .child(chatID).child("avatar.jpg"))
                 .placeholder(R.drawable.astronaut)
+                .signature(new ObjectKey(System.currentTimeMillis()))
                 .into(chatImage);
 
-        mDatabase.getReference("chats").child(chatID).child("name").addValueEventListener(new ValueEventListener() {
+        mDatabase.getReference("chats").child(chatID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                chatName.setText(snapshot.getValue(String.class));
+                chatName.setText(snapshot.child("name").getValue(String.class));
+                final int[] onlineCounter = {0};
+                for(DataSnapshot dss: snapshot.child("members").getChildren()){
+                    mDatabase.getReference("users").child(dss.getKey()).child("connections").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snap) {
+                            if (snap.hasChildren()) onlineCounter[0]++;
+                            members.setText(String.format(getString(R.string.online_counter), snapshot.child("members").getChildrenCount(), onlineCounter[0]));
+                        }
 
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
             }
 
             @Override
@@ -180,6 +201,7 @@ public class ChatlogFragment extends Fragment {
                                         .child("messageIDs")
                                         .child(key).setValue(true);
                                 messageField.setText("");
+                                mp.start();
                             } else {
                                 Log.e("MessagesERR", task.getException().getMessage());
                                 Toast.makeText(getContext(), R.string.check_connection, Toast.LENGTH_LONG).show();

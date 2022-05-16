@@ -15,6 +15,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.ObjectKey;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,6 +36,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
 
     private List<Chat> chatList;
     private Context ctx;
+    HashMap<String, ChatlogFragment> chatFragments = new HashMap<>();
 
     public ChatAdapter(Context ctx){
         this.chatList = new ArrayList<>();
@@ -73,15 +76,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
     @Override
     public void onBindViewHolder(@NonNull ChatInfoHolder holder, int position) {
 
-        Chat chat = chatList.get(position);
-        HashMap<String, ChatlogFragment> chatFragments = new HashMap<>();
+        Chat chat = chatList.get(holder.getAdapterPosition());
 
         holder.lastMessage.setText(R.string.no_messages_yet);
         holder.chatName.setText(chat.getName());
+
         Glide.with(ctx)
                 .load(FirebaseStorage.getInstance().getReference("chat_pics")
                 .child(chat.getId()).child("avatar.jpg"))
-                .placeholder(R.drawable.astronaut)
+                .error(R.drawable.astronaut)
+                .signature(new ObjectKey(System.currentTimeMillis()))
                 .into(holder.chatImage);
 
         Utils.getDatabase().getReference("chats").child(chat.getId())
@@ -92,7 +96,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                String text = snapshot.getValue(Message.class).getText();
+                                Message msg = snapshot.getValue(Message.class);
+                                String text = msg.getText();
                                 if(text.length() > 50){
                                     text = text.substring(0, 47) + "...";
                                 }
@@ -130,16 +135,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
             @Override
             public void onClick(View view) {
                 if(!chatFragments.containsKey(chat.getId())) {
-                    Log.i("ChatINF", "Created new chatlog window");
                     chatFragments.put(chat.getId(), new ChatlogFragment(chat.getId()));
                     ((AppCompatActivity) ctx).getSupportFragmentManager().beginTransaction()
-                            .setCustomAnimations(R.anim.slide_in_vertical, R.anim.slide_out_vertical)
                             .add(R.id.frame, chatFragments.get(chat.getId()))
+                            .hide(chatFragments.get(chat.getId()))
                             .addToBackStack("chatWindow").commit();
-                    return;
                 }
                 ((AppCompatActivity) ctx).getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_vertical, R.anim.slide_out_vertical)
+                        .setCustomAnimations(R.anim.slide_in_vertical, R.anim.slide_out_vertical, R.anim.slide_in_vertical, R.anim.slide_out_vertical)
                         .show(chatFragments.get(chat.getId()))
                         .addToBackStack("chatWindow").commit();
             }

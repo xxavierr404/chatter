@@ -2,6 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Chatter" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Primary brand color. -->
+        <item name="android:forceDarkAllowed">false</item>
         <item name="colorPrimary">#E3E3E3</item>
         <item name="colorOnPrimary">#121212</item>
         <!-- Status bar color. -->

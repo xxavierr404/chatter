@@ -15,12 +15,13 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="ChatName"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/cardRounded"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.177" />
 
     <TextView
         android:id="@+id/last_message"
@@ -32,12 +33,13 @@
         android:maxLength="30"
         android:maxLines="1"
         android:text="Last message of chat goes here"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/cardRounded"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.686" />
+        app:layout_constraintVertical_bias="0.698" />
 
     <ImageView
         android:id="@+id/unread_indicator"
@@ -70,7 +72,8 @@
             android:id="@+id/chat_image"
             android:layout_width="55dp"
             android:layout_height="55dp"
-            tools:src="@drawable/astronaut" />
+            tools:src="@drawable/astronaut"
+            android:scaleType="fitCenter"/>
 
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

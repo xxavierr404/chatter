@@ -49,14 +49,14 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        Utils.getDatabase();
         profileFragment.setId(mAuth.getCurrentUser().getUid());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
         manager.beginTransaction().add(R.id.nav_host_fragment_activity_main, finderFragment, "Finder").hide(finderFragment)
                 .add(R.id.nav_host_fragment_activity_main, profileFragment, "Profile").hide(profileFragment)
-                .add(R.id.nav_host_fragment_activity_main, chatsFragment, "Chats").commit();
+                .add(R.id.nav_host_fragment_activity_main, chatsFragment, "Chats")
+                .addToBackStack("Initial").commit();
 
         navView.setSelectedItemId(R.id.navigation_chats);
 
