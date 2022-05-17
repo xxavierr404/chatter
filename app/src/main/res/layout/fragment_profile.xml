@@ -142,8 +142,8 @@
             android:clickable="true"
             android:contentDescription="@string/user_avatar"
             android:focusable="true"
-            tools:srcCompat="@drawable/astronaut"
-            android:scaleType="fitCenter"/>
+            android:scaleType="centerCrop"
+            tools:srcCompat="@drawable/astronaut" />
 
     </androidx.cardview.widget.CardView>
 

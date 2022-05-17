@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,10 +22,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.teamzero.chatter.R;
-import com.teamzero.chatter.Utils;
+import com.teamzero.chatter.utils.Utils;
 import com.teamzero.chatter.model.Chat;
 import com.teamzero.chatter.model.Message;
-import com.teamzero.chatter.ui.fragments.messaging.ChatlogFragment;
+import com.teamzero.chatter.ui.fragments.chats.ChatlogFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,6 +79,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
 
         holder.lastMessage.setText(R.string.no_messages_yet);
         holder.chatName.setText(chat.getName());
+        holder.layout.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.fade_in));
 
         Glide.with(ctx)
                 .load(FirebaseStorage.getInstance().getReference("chat_pics")

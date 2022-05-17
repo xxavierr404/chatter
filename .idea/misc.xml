@@ -26,7 +26,8 @@
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_finder.xml" value="0.264" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_home.xml" value="0.22826086956521738" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_login.xml" value="0.2" />
-        <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_memberlist.xml" value="0.17708333333333334" />
+        <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_member_manage.xml" value="0.176" />
+        <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_memberlist.xml" value="0.176" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_password_reset.xml" value="0.2" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_profile.xml" value="0.264" />
         <entry key="..\:/code/Chatter/app/src/main/res/layout/fragment_register.xml" value="0.176" />

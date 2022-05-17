@@ -10,10 +10,10 @@ public class Chat {
     private String name;
     private String adminUID;
     private String desc;
-    private Map<String, Boolean> members = new HashMap<>();
-    private Map<String, Boolean> authorized = new HashMap<>();
-    private Map<String, Boolean> tags = new HashMap<>();
-    private Map<String, Boolean> messageIDs = new HashMap<>();
+    private Map<String, Object> members = new HashMap<>();
+    private Map<String, Object> authorized = new HashMap<>();
+    private Map<String, Object> tags = new HashMap<>();
+    private Map<String, Object> messageIDs = new HashMap<>();
 
     public Chat(){}
 
@@ -24,8 +24,8 @@ public class Chat {
         this.desc = "This place was just discovered.";
     }
 
-    public Chat(String adminUID, Map<String, Boolean> members, String name,
-                Map<String, Boolean> authorized, Map<String, Boolean> tags, Map<String, Boolean> messageIDs){
+    public Chat(String adminUID, Map<String, Object> members, String name,
+                Map<String, Object> authorized, Map<String, Object> tags, Map<String, Object> messageIDs){
         this.adminUID = adminUID;
         this.members = members;
         this.name = name;
@@ -38,19 +38,19 @@ public class Chat {
         return adminUID;
     }
 
-    public Map<String, Boolean> getMembers() {
+    public Map<String, Object> getMembers() {
         return members;
     }
 
-    public Map<String, Boolean> getAuthorized() {
+    public Map<String, Object> getAuthorized() {
         return authorized;
     }
 
-    public Map<String, Boolean> getMessageIDs() {
+    public Map<String, Object> getMessageIDs() {
         return messageIDs;
     }
 
-    public Map<String, Boolean> getTags() {
+    public Map<String, Object> getTags() {
         return tags;
     }
 
@@ -82,7 +82,7 @@ public class Chat {
         tags.put(newTag, true);
     }
 
-    public void setTags(Map<String, Boolean> tags){
+    public void setTags(Map<String, Object> tags){
         this.tags = tags;
     }
 

@@ -1,14 +1,10 @@
-package com.teamzero.chatter.ui.fragments.messaging;
+package com.teamzero.chatter.ui.fragments.chats;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,20 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.teamzero.chatter.R;
-import com.teamzero.chatter.Utils;
-import com.teamzero.chatter.databinding.FragmentChatsBinding;
+import com.teamzero.chatter.utils.Role;
+import com.teamzero.chatter.utils.Utils;
 import com.teamzero.chatter.databinding.FragmentMemberlistBinding;
-import com.teamzero.chatter.model.Chat;
 import com.teamzero.chatter.model.User;
-import com.teamzero.chatter.viewholders.ChatAdapter;
 import com.teamzero.chatter.viewholders.MembersAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 public class MemberListFragment extends Fragment{
 
@@ -64,7 +55,7 @@ public class MemberListFragment extends Fragment{
         if(mAuth.getCurrentUser() == null) return;
 
         mDatabase = Utils.getDatabase();
-        adapter = new MembersAdapter(getContext());
+        adapter = new MembersAdapter(getContext(), chatID);
 
         RecyclerView memberList = binding.memberList;
         ImageButton closeButton = binding.closeMemberListButton;
@@ -94,6 +85,25 @@ public class MemberListFragment extends Fragment{
 
                         }
                     });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        mDatabase.getReference("chats").child(chatID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<Boolean, String> moderators = (Map)snapshot.child("authorized").getValue();
+                if(snapshot.child("adminUID").getValue(String.class).equals(mAuth.getCurrentUser().getUid())){
+                    adapter.setRole(Role.ADMIN);
+                } else if (moderators != null && moderators.containsKey(mAuth.getCurrentUser().getUid())){
+                    adapter.setRole(Role.MODERATOR);
+                } else {
+                    adapter.setRole(Role.MEMBER);
                 }
             }
 

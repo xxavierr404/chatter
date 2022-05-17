@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient"
     android:clickable="true"
-    tools:context=".ui.fragments.messaging.ChatlogFragment">
+    tools:context=".ui.fragments.chats.ChatlogFragment">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/toolbar"

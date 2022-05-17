@@ -59,4 +59,9 @@
     <string name="chat_description">Chat description:</string>
     <string name="online_counter">%1$d members, %2$d online.</string>
     <string name="members">Chat members</string>
+    <string name="manage">Manage %1$s</string>
+    <string name="kickMemberButton">Kick member</string>
+    <string name="promoteButton">Promote</string>
+    <string name="demoteButton">Demote</string>
+    <string name="member_kicked">Bye-bye!</string>
 </resources>

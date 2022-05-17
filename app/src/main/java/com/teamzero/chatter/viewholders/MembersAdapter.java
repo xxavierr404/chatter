@@ -13,13 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.teamzero.chatter.R;
-import com.teamzero.chatter.Role;
-import com.teamzero.chatter.Utils;
+import com.teamzero.chatter.model.Chat;
+import com.teamzero.chatter.ui.fragments.chats.MemberManageFragment;
+import com.teamzero.chatter.utils.Role;
+import com.teamzero.chatter.utils.Utils;
 import com.teamzero.chatter.model.User;
 import com.teamzero.chatter.ui.fragments.main.ProfileFragment;
 
@@ -31,13 +34,15 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberIn
     private List<User> members;
     private Context ctx;
     private Role role = Role.MEMBER;
+    private String chatID;
 
     public void setRole(Role role){
         this.role = role;
     }
 
-    public MembersAdapter(Context ctx){
+    public MembersAdapter(Context ctx, String chatID){
         this.members = new ArrayList<>();
+        this.chatID = chatID;
         this.ctx = ctx;
     }
 
@@ -74,8 +79,8 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberIn
 
         Glide.with(ctx)
                 .load(FirebaseStorage.getInstance().getReference("profile_pics")
-                .child(member.getId())
-                .child("profile.jpg"))
+                        .child(member.getId())
+                        .child("profile.jpg"))
                 .error(R.drawable.astronaut)
                 .signature(new ObjectKey(System.currentTimeMillis()))
                 .into(holder.memberAvatar);
@@ -84,7 +89,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberIn
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 holder.memberName.setText(snapshot.child("nickname").getValue(String.class));
-                if(snapshot.child("connections").getChildrenCount() > 0){
+                if (snapshot.child("connections").getChildrenCount() > 0) {
                     holder.presence.setImageResource(android.R.drawable.presence_online);
                 } else {
                     holder.presence.setImageResource(android.R.drawable.presence_offline);
@@ -97,20 +102,34 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberIn
             }
         });
 
-        switch(role){
-            case MEMBER:{
-                holder.itemView.setOnClickListener((v)->{
-                    ((AppCompatActivity)ctx).getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.frame, new ProfileFragment(member.getId(), false))
-                        .addToBackStack("profile").commit();
-                });
-                break;
-            }
-            default:
-                holder.itemView.setOnClickListener((v)->{});
-        }
+        holder.itemView.setOnClickListener((v) -> {
+            ((AppCompatActivity) ctx).getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.frame, new ProfileFragment(member.getId(), false))
+                    .addToBackStack("profile").commit();
+        });
 
+        holder.itemView.setOnLongClickListener((v)->{
+            if(!member.getId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) && (role == Role.ADMIN || role == Role.MODERATOR)){
+                Utils.getDatabase().getReference("chats").child(chatID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ((AppCompatActivity)ctx).getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
+                                .add(R.id.frame, new MemberManageFragment(snapshot.getValue(Chat.class), member))
+                                .addToBackStack("manageMember")
+                                .commit();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+            return true;
+        });
     }
 
     @Override

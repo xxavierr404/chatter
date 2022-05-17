@@ -1,4 +1,4 @@
-package com.teamzero.chatter;
+package com.teamzero.chatter.utils;
 
 import android.content.Context;
 

@@ -72,8 +72,8 @@
             android:id="@+id/chat_image"
             android:layout_width="55dp"
             android:layout_height="55dp"
-            tools:src="@drawable/astronaut"
-            android:scaleType="fitCenter"/>
+            android:scaleType="centerCrop"
+            tools:src="@drawable/astronaut" />
 
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

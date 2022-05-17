@@ -57,4 +57,9 @@
     <string name="chat_description">Описание чата:</string>
     <string name="online_counter">%1$d участников, %2$d в сети.</string>
     <string name="members">Участники чата</string>
+    <string name="manage">Управление %1$s</string>
+    <string name="kickMemberButton">Выгнать участника</string>
+    <string name="promoteButton">Сделать модератором</string>
+    <string name="demoteButton">Разжаловать</string>
+    <string name="member_kicked">Пока-пока!</string>
 </resources>

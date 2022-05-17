@@ -24,10 +24,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.teamzero.chatter.R;
-import com.teamzero.chatter.Utils;
+import com.teamzero.chatter.utils.Utils;
 import com.teamzero.chatter.databinding.FragmentFinderBinding;
 import com.teamzero.chatter.model.Chat;
-import com.teamzero.chatter.ui.fragments.messaging.ChatlogFragment;
+import com.teamzero.chatter.ui.fragments.chats.ChatlogFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;

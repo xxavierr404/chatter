@@ -76,8 +76,8 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:clickable="true"
-            tools:srcCompat="@tools:sample/avatars"
-            android:scaleType="fitCenter"/>
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/avatars" />
 
     </androidx.cardview.widget.CardView>
 

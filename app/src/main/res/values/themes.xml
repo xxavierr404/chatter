@@ -9,6 +9,7 @@
         <!-- Customize your theme here. -->
         <item name="android:colorBackground">#131313</item>
         <item name="android:textColorPrimary">#CFCFCF</item>
+        <item name="textAppearanceButton">@style/ShapeAppearance.Material3.MediumComponent</item>
         <item name="materialButtonStyle">@style/Widget.Material3.Button</item>
     </style>
 </resources>

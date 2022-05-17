@@ -3,7 +3,6 @@ package com.teamzero.chatter.ui.fragments.main;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -13,20 +12,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.teamzero.chatter.R;
-import com.teamzero.chatter.Utils;
+import com.teamzero.chatter.utils.Utils;
 import com.teamzero.chatter.databinding.FragmentChatsBinding;
 import com.teamzero.chatter.model.Chat;
 import com.teamzero.chatter.viewholders.ChatAdapter;
@@ -71,6 +69,7 @@ public class ChatsFragment extends Fragment{
         chatList.addItemDecoration(decoration);
         chatList.setLayoutManager(layoutManager);
         chatList.setAdapter(adapter);
+        chatList.setItemAnimator(new DefaultItemAnimator());
         chatList.setItemViewCacheSize(32);
 
         DatabaseReference chatRef = mDatabase.getReference("chats");

@@ -1,4 +1,4 @@
-package com.teamzero.chatter.ui.fragments.messaging;
+package com.teamzero.chatter.ui.fragments.chats;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -18,10 +18,9 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.teamzero.chatter.R;
-import com.teamzero.chatter.Utils;
+import com.teamzero.chatter.utils.Utils;
 import com.teamzero.chatter.databinding.FragmentChatOptionsBinding;
 import com.teamzero.chatter.model.Chat;
-import com.teamzero.chatter.ui.fragments.messaging.ChatlogFragment;
 import com.teamzero.chatter.ui.fragments.main.ProfileFragment;
 
 public class ChatOptionsFragment extends Fragment {

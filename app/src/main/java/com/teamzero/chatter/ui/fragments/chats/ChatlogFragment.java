@@ -1,4 +1,4 @@
-package com.teamzero.chatter.ui.fragments.messaging;
+package com.teamzero.chatter.ui.fragments.chats;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -33,7 +33,7 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.teamzero.chatter.R;
-import com.teamzero.chatter.Utils;
+import com.teamzero.chatter.utils.Utils;
 import com.teamzero.chatter.databinding.FragmentChatlogBinding;
 import com.teamzero.chatter.model.Chat;
 import com.teamzero.chatter.model.Message;
@@ -69,6 +69,7 @@ public class ChatlogFragment extends Fragment {
         ImageButton backButton = binding.closeChatButton;
         ImageButton editButton = binding.editChatButton;
         ImageButton sendButton = binding.send;
+        // TODO: 17.05.2022 Отправка вложений
         ImageButton uploadButton = binding.upload;
         ImageView chatImage = binding.chatImage;
         TextView chatName = binding.chatTitle;
@@ -210,6 +211,7 @@ public class ChatlogFragment extends Fragment {
         binding.toolbar.setOnClickListener((v)->{
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
+                    .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
                     .add(R.id.frame, new MemberListFragment(chatID))
                     .addToBackStack("members")
                     .commit();

@@ -25,9 +25,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
+import com.google.android.gms.dynamic.SupportFragmentWrapper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,7 +40,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.teamzero.chatter.R;
-import com.teamzero.chatter.Utils;
+import com.teamzero.chatter.utils.Utils;
 import com.teamzero.chatter.databinding.FragmentProfileBinding;
 import com.teamzero.chatter.model.Chat;
 
@@ -48,7 +50,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.StringJoiner;
 
 public class ProfileFragment extends Fragment {
 
@@ -329,7 +330,12 @@ public class ProfileFragment extends Fragment {
             mAuth.signOut();
         }
         Toast.makeText(getContext(), R.string.left_chat, Toast.LENGTH_SHORT).show();
-        ((AppCompatActivity)getActivity()).getSupportFragmentManager().popBackStack("Initial", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        for(Fragment fragment: fm.getFragments()){
+            transaction = transaction.remove(fragment);
+        }
+        transaction.commit();
         startActivity(new Intent(getContext(), getActivity().getClass()));
     }
 
