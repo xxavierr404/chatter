@@ -103,6 +103,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberIn
         });
 
         holder.itemView.setOnClickListener((v) -> {
+            if(member.getId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) return;
             ((AppCompatActivity) ctx).getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.frame, new ProfileFragment(member.getId(), false))

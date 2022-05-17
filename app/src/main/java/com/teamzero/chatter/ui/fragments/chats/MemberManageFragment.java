@@ -2,7 +2,9 @@ package com.teamzero.chatter.ui.fragments.chats;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.media.AudioAttributes;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +62,19 @@ public class MemberManageFragment extends Fragment {
         Button kickButton = binding.kickButton;
         Button switchRoleButton = binding.switchRoleButton;
 
+        AudioAttributes attributes = new AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .build();
+        SoundPool soundPool = new SoundPool.Builder()
+                .setAudioAttributes(attributes)
+                .setMaxStreams(3)
+                .build();
+
+        int kickSoundId = soundPool.load(getContext(), R.raw.kick, 1);
+        int promoteSoundId = soundPool.load(getContext(), R.raw.promote, 2);
+        int demoteSoundId = soundPool.load(getContext(), R.raw.demote, 3);
+
         title.setText(String.format(getString(R.string.manage), member.getNickname()));
 
         background.setOnClickListener((v)->{
@@ -86,6 +101,7 @@ public class MemberManageFragment extends Fragment {
                         Toast.makeText(getContext(), R.string.member_kicked, Toast.LENGTH_SHORT).show();
                         getActivity().getSupportFragmentManager().popBackStack("manageMember", 1);
                         getActivity().getSupportFragmentManager().popBackStack("members", 1);
+                        soundPool.play(kickSoundId, 1, 1, 1, 0, 1);
                         break;
                     }
                     case DialogInterface.BUTTON_NEGATIVE: break;
@@ -122,6 +138,7 @@ public class MemberManageFragment extends Fragment {
                                     getActivity().getSupportFragmentManager().popBackStack("manageMember", 1);
                                 }
                             });
+                    soundPool.play(demoteSoundId, 1, 1, 1, 0, 1);
                 });
             } else {
                 switchRoleButton.setOnClickListener((v)->{
@@ -137,6 +154,7 @@ public class MemberManageFragment extends Fragment {
                                     getActivity().getSupportFragmentManager().popBackStack("manageMember", 1);
                                 }
                             });
+                    soundPool.play(promoteSoundId, 1, 1, 1, 0, 1);
                 });
             }
         } else {
