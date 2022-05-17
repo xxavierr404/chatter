@@ -1,6 +1,5 @@
 package com.teamzero.chatter.ui.fragments.main;
 
-import android.media.MediaActionSound;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,13 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -26,21 +23,18 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.teamzero.chatter.MainActivity;
 import com.teamzero.chatter.R;
 import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.databinding.FragmentFinderBinding;
 import com.teamzero.chatter.model.Chat;
-import com.teamzero.chatter.model.User;
+import com.teamzero.chatter.ui.fragments.messaging.ChatlogFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class FinderFragment extends Fragment {
 

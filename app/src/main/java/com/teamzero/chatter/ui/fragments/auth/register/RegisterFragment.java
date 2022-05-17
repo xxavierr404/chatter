@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.teamzero.chatter.R;
 import com.teamzero.chatter.databinding.FragmentRegisterBinding;
@@ -83,9 +84,10 @@ public class RegisterFragment extends Fragment {
                 Toast.makeText(getContext(), R.string.confirmation_sent, Toast.LENGTH_LONG).show();
                 task.getResult().getUser().sendEmailVerification();
 
-                User user = new User("Chatman", getString(R.string.default_bio));
-                FirebaseDatabase.getInstance().getReference("users")
-                        .child(task.getResult().getUser().getUid()).setValue(user);
+                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+                String id = task.getResult().getUser().getUid();
+                User user = new User(id, "Chatman", getString(R.string.default_bio));
+                userRef.child(id).setValue(user);
 
                 getActivity().getSupportFragmentManager().popBackStack();
             } else {

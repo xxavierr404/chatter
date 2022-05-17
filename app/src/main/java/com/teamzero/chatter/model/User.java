@@ -1,43 +1,30 @@
 package com.teamzero.chatter.model;
 
-import android.media.Image;
-import android.util.Log;
+import com.google.firebase.database.Exclude;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class User {
+    private String id;
     private String nickname;
     private String bio;
-    private List<String> chatIDs;
+    private Map<String, Boolean> chatIDs;
 
     public User(){
-        chatIDs = new ArrayList<>();
+        chatIDs = new HashMap<>();
     }
 
-    public User(String nickname, String bio) {
+    public User(String id, String nickname, String bio) {
+        this.id = id;
         this.nickname = nickname;
         this.bio = bio;
-        chatIDs = new ArrayList<>();
+        chatIDs = new HashMap<>();
     }
 
-    public User(String nickname, String bio, List<String> chatIDs) {
+    public User(String id, String nickname, String bio, Map<String, Boolean> chatIDs) {
+        this.id = id;
         this.nickname = nickname;
         this.bio = bio;
         this.chatIDs = chatIDs;
@@ -59,19 +46,27 @@ public class User {
         this.bio = bio;
     }
 
-    public List<String> getChatIDs() {
+    public Map<String, Boolean> getChatIDs() {
         return chatIDs;
     }
 
-    public void setChatIDs(List<String> chatIDs){
+    public void setChatIDs(Map<String, Boolean> chatIDs){
         this.chatIDs = chatIDs;
     }
 
     public void addChat(String chatID){
-        chatIDs.add(chatID);
+        chatIDs.put(chatID, true);
     }
 
     public void removeChat(String chatID){
         chatIDs.remove(chatID);
+    }
+    
+    public String getId(){
+        return this.id;
+    }
+
+    public void setId(String id){
+        this.id = id;
     }
 }

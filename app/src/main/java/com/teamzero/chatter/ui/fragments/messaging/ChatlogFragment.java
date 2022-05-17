@@ -1,4 +1,4 @@
-package com.teamzero.chatter.ui.fragments.main;
+package com.teamzero.chatter.ui.fragments.messaging;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -37,12 +37,7 @@ import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.databinding.FragmentChatlogBinding;
 import com.teamzero.chatter.model.Chat;
 import com.teamzero.chatter.model.Message;
-import com.teamzero.chatter.ui.fragments.ChatOptionsFragment;
-import com.teamzero.chatter.viewholders.ChatAdapter;
 import com.teamzero.chatter.viewholders.MessageAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ChatlogFragment extends Fragment {
 
@@ -210,6 +205,14 @@ public class ChatlogFragment extends Fragment {
                             }
                         }
                     });
+        });
+
+        binding.toolbar.setOnClickListener((v)->{
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.frame, new MemberListFragment(chatID))
+                    .addToBackStack("members")
+                    .commit();
         });
     }
 }

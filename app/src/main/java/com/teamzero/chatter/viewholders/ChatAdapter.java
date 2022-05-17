@@ -1,7 +1,6 @@
 package com.teamzero.chatter.viewholders;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +24,7 @@ import com.teamzero.chatter.R;
 import com.teamzero.chatter.Utils;
 import com.teamzero.chatter.model.Chat;
 import com.teamzero.chatter.model.Message;
-import com.teamzero.chatter.ui.fragments.main.ChatlogFragment;
+import com.teamzero.chatter.ui.fragments.messaging.ChatlogFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
