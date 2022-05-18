@@ -37,7 +37,7 @@ import com.teamzero.chatter.utils.Utils;
 import com.teamzero.chatter.databinding.FragmentChatlogBinding;
 import com.teamzero.chatter.model.Chat;
 import com.teamzero.chatter.model.Message;
-import com.teamzero.chatter.viewholders.MessageAdapter;
+import com.teamzero.chatter.adapters.MessageAdapter;
 
 public class ChatlogFragment extends Fragment {
 

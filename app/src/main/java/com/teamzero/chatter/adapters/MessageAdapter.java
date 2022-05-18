@@ -1,4 +1,4 @@
-package com.teamzero.chatter.viewholders;
+package com.teamzero.chatter.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

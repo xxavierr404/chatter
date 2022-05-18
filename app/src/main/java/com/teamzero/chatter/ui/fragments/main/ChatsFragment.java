@@ -27,7 +27,7 @@ import com.teamzero.chatter.R;
 import com.teamzero.chatter.utils.Utils;
 import com.teamzero.chatter.databinding.FragmentChatsBinding;
 import com.teamzero.chatter.model.Chat;
-import com.teamzero.chatter.viewholders.ChatAdapter;
+import com.teamzero.chatter.adapters.ChatAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

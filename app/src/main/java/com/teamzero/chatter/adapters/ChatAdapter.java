@@ -1,10 +1,9 @@
-package com.teamzero.chatter.viewholders;
+package com.teamzero.chatter.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -79,7 +78,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatInfoHolder
 
         holder.lastMessage.setText(R.string.no_messages_yet);
         holder.chatName.setText(chat.getName());
-        holder.layout.startAnimation(AnimationUtils.loadAnimation(ctx, R.anim.fade_in));
 
         Glide.with(ctx)
                 .load(FirebaseStorage.getInstance().getReference("chat_pics")

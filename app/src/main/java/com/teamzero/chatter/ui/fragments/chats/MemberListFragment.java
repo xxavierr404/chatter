@@ -22,7 +22,7 @@ import com.teamzero.chatter.utils.Role;
 import com.teamzero.chatter.utils.Utils;
 import com.teamzero.chatter.databinding.FragmentMemberlistBinding;
 import com.teamzero.chatter.model.User;
-import com.teamzero.chatter.viewholders.MembersAdapter;
+import com.teamzero.chatter.adapters.MembersAdapter;
 
 import java.util.Map;
 
