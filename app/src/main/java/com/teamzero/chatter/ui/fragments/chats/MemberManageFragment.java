@@ -115,7 +115,7 @@ public class MemberManageFragment extends Fragment {
                         .setPositiveButton(R.string.yes, kickClickListener)
                         .setNegativeButton(R.string.no, kickClickListener).show();
             });
-            if(member.getId().equals(chat.getAdminUID())){
+            if(member.getId().equals(chat.getAdminUID()) || (chat.getAuthorized().containsKey(member.getId()) && chat.getAuthorized().containsKey(currentID))){
                 kickButton.setEnabled(false);
                 kickButton.setVisibility(View.GONE);
             }

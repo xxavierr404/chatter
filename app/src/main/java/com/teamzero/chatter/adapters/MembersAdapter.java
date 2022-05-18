@@ -111,7 +111,8 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MemberIn
         });
 
         holder.itemView.setOnLongClickListener((v)->{
-            if(!member.getId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) && (role == Role.ADMIN || role == Role.MODERATOR)){
+            if(!member.getId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    && (role == Role.ADMIN || role == Role.MODERATOR)){
                 Utils.getDatabase().getReference("chats").child(chatID).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
